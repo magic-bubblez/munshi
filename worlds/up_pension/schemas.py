@@ -60,6 +60,7 @@ class LifeCertMode(StrEnum):
 class EkycResult(StrEnum):
     MATCH = "MATCH"
     NAME_MISMATCH = "NAME_MISMATCH"
+    BIOMETRIC_MISMATCH = "BIOMETRIC_MISMATCH"
     DECEASED_FLAG = "DECEASED_FLAG"
     INVALID_AADHAAR = "INVALID_AADHAAR"
 
@@ -108,6 +109,8 @@ class Pensioner(BaseModel):
     annual_household_income: int
     disability_percentage: int | None = None
     dod: date | None = None
+    account_opened_days_ago: int = 0
+    spouse_alive: bool | None = None
     recent_account_changes: list[BankAccountChange] = Field(default_factory=list)
     audit_flags: list[str] = Field(default_factory=list)
 
@@ -120,6 +123,7 @@ class UIDAIRecord(BaseModel):
     dob: date
     gender: Gender
     is_alive: bool = True
+    biometric_match: bool = True
     death_flagged_at: date | None = None
 
 

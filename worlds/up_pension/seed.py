@@ -124,6 +124,8 @@ def _build_pensioner(entry: dict[str, Any]) -> Pensioner:
         annual_household_income=entry.get("annual_household_income", 30000),
         disability_percentage=entry.get("disability_percentage"),
         dod=date.fromisoformat(entry["dod"]) if entry.get("dod") else None,
+        account_opened_days_ago=entry.get("account_opened_days_ago", 0),
+        spouse_alive=entry.get("spouse_alive"),
         recent_account_changes=recent_changes,
         audit_flags=audit_flags,
     )
@@ -136,6 +138,7 @@ def _build_uidai(pensioner: Pensioner, uidai_entry: dict[str, Any]) -> UIDAIReco
         dob=date.fromisoformat(uidai_entry["dob"]) if uidai_entry.get("dob") else pensioner.dob,
         gender=Gender(uidai_entry.get("gender", pensioner.gender.value)),
         is_alive=uidai_entry.get("is_alive", True),
+        biometric_match=uidai_entry.get("biometric_match", True),
         death_flagged_at=(
             date.fromisoformat(uidai_entry["death_flagged_at"])
             if uidai_entry.get("death_flagged_at")

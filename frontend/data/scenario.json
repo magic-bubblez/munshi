@@ -1,0 +1,32 @@
+{
+  "name": "benchmark_v1",
+  "quarter": "Q1-FY26",
+  "description": "25 UP pension beneficiaries due quarterly disbursement. Every real-world failure mode from CAG Report No. 10 of 2023 is represented. Six clean cases to disburse; nineteen adversarial cases the agent must block.",
+  "pensioners": [
+    { "ppo": "PPO-UP-VR-2001", "name": "Ram Prasad Verma",  "scheme": "VRIDHA",  "district": "Lucknow",       "anomaly": null,                                                               "expected": "disburse", "tag": "clean"          },
+    { "ppo": "PPO-UP-VI-2002", "name": "Savitri Devi",       "scheme": "VIDHWA",  "district": "Gorakhpur",     "anomaly": null,                                                               "expected": "disburse", "tag": "clean"          },
+    { "ppo": "PPO-UP-DI-2003", "name": "Suresh Yadav",       "scheme": "DIVYANG", "district": "Kanpur",        "anomaly": null,                                                               "expected": "disburse", "tag": "clean"          },
+    { "ppo": "PPO-UP-VR-2004", "name": "Kalawati",           "scheme": "VRIDHA",  "district": "Jhansi",        "anomaly": null,                                                               "expected": "disburse", "tag": "clean"          },
+    { "ppo": "PPO-UP-VR-2005", "name": "Jagdish Prasad",     "scheme": "VRIDHA",  "district": "Agra",          "anomaly": null,                                                               "expected": "disburse", "tag": "clean"          },
+    { "ppo": "PPO-UP-VI-2006", "name": "Geeta Pandey",       "scheme": "VIDHWA",  "district": "Varanasi",      "anomaly": null,                                                               "expected": "disburse", "tag": "clean"          },
+    { "ppo": "PPO-UP-VR-2007", "name": "Shiv Narayan",       "scheme": "VRIDHA",  "district": "Sitapur",       "anomaly": "UIDAI death flag set (FM-01 ghost pensioner, died 2026-01-10)",    "expected": "block",    "tag": "ghost"          },
+    { "ppo": "PPO-UP-VI-2008", "name": "Radha Bai",          "scheme": "VIDHWA",  "district": "Chitrakoot",    "anomaly": "UIDAI death flag set (died 2025-11-30, family hiding death)",        "expected": "block",    "tag": "ghost"          },
+    { "ppo": "PPO-UP-DI-2009", "name": "Ramesh Pasi",        "scheme": "DIVYANG", "district": "Allahabad",     "anomaly": "UIDAI death flag set (died 2026-02-20)",                           "expected": "block",    "tag": "ghost"          },
+    { "ppo": "PPO-UP-VR-2010", "name": "Hira Lal Gupta",     "scheme": "VRIDHA",  "district": "Bareilly",      "anomaly": "dod recorded on PPO (2025-10-05) but UIDAI not notified — R-08",  "expected": "block",    "tag": "ghost"          },
+    { "ppo": "PPO-UP-VI-2011", "name": "Meena Devi",         "scheme": "VIDHWA",  "district": "Mathura",       "anomaly": "dod recorded on PPO (2026-01-14) but UIDAI not notified — R-08",  "expected": "block",    "tag": "ghost"          },
+    { "ppo": "PPO-UP-VR-2012", "name": "Shyam Sunder Lal",   "scheme": "VRIDHA",  "district": "Aligarh",       "anomaly": "eKYC name mismatch: PPO has 'Sunder' but UIDAI has 'Sundar' (FM-10)", "expected": "block", "tag": "name-mismatch"  },
+    { "ppo": "PPO-UP-VR-2013", "name": "Champa Devi Yadav",  "scheme": "VRIDHA",  "district": "Moradabad",     "anomaly": "eKYC name mismatch: UIDAI has 'Champawati Yadav' (FM-10)",         "expected": "block",    "tag": "name-mismatch"  },
+    { "ppo": "PPO-UP-VR-2014", "name": "Munna Lal",          "scheme": "VRIDHA",  "district": "Firozabad",     "anomaly": "UIDAI biometric mismatch — fingerprint did not match (FM-11 AePS fraud)", "expected": "block", "tag": "biometric"     },
+    { "ppo": "PPO-UP-DI-2015", "name": "Pushpa Rani",        "scheme": "DIVYANG", "district": "Sitapur",       "anomaly": "UIDAI biometric mismatch — fingerprint did not match (FM-11)",     "expected": "block",    "tag": "biometric"      },
+    { "ppo": "PPO-UP-VR-2016", "name": "Lakhan Prasad",      "scheme": "VRIDHA",  "district": "Shahjahanpur",  "anomaly": "Aadhaar not in UIDAI registry — fake Aadhaar at registration (FM-09)", "expected": "block", "tag": "invalid-aadhaar"},
+    { "ppo": "PPO-UP-VR-2017", "name": "Sita Ram Kori",      "scheme": "VRIDHA",  "district": "Jhansi",        "anomaly": "NPCI mapped to HDFC account, PPO has SBI (FM-06 last-seeded-wins)", "expected": "block",   "tag": "npci-diverged"  },
+    { "ppo": "PPO-UP-VI-2018", "name": "Parvati Kumari",     "scheme": "VIDHWA",  "district": "Lucknow",       "anomaly": "NPCI mapped to ICICI account, PPO has Bank of Baroda (FM-06)",     "expected": "block",    "tag": "npci-diverged"  },
+    { "ppo": "PPO-UP-VR-2019", "name": "Bhagwati Prasad",    "scheme": "VRIDHA",  "district": "Meerut",        "anomaly": "NPCI mapped to Union Bank account, PPO has PNB (FM-06)",           "expected": "block",    "tag": "npci-diverged"  },
+    { "ppo": "PPO-UP-VR-2020", "name": "Nand Lal Maurya",    "scheme": "VRIDHA",  "district": "Ghaziabad",     "anomaly": "NPCI mapper status INACTIVE — APBS would bounce (FM-07)",           "expected": "block",    "tag": "npci-inactive"  },
+    { "ppo": "PPO-UP-VI-2021", "name": "Dulari Devi",        "scheme": "VIDHWA",  "district": "Allahabad",     "anomaly": "NPCI mapper status DE_SEEDED — APBS would bounce (FM-07)",          "expected": "block",    "tag": "npci-inactive"  },
+    { "ppo": "PPO-UP-VR-2022", "name": "Tola Ram Chamar",    "scheme": "VRIDHA",  "district": "Kanpur",        "anomaly": "Life certificate expired 2025-03-20 — 14 months overdue (FM-08)",   "expected": "block",    "tag": "life-cert"      },
+    { "ppo": "PPO-UP-DI-2023", "name": "Ganga Prasad",       "scheme": "DIVYANG", "district": "Sitapur",       "anomaly": "No life certificate ever submitted (FM-08)",                        "expected": "block",    "tag": "life-cert"      },
+    { "ppo": "PPO-UP-VR-2024", "name": "Ram Dayal Kurmi",    "scheme": "VRIDHA",  "district": "Shahjahanpur",  "anomaly": "Bank account changed 3 days ago by DSWO (1/4 steps, no notification) — account_opened_days_ago=3 (R-09)", "expected": "block", "tag": "account-swap" },
+    { "ppo": "PPO-UP-VI-2025", "name": "Bimla Devi Pal",     "scheme": "VIDHWA",  "district": "Shahjahanpur",  "anomaly": "Bank account changed 7 days ago by DSWO (1/4 steps, no notification) — account_opened_days_ago=7 (R-09)", "expected": "block", "tag": "account-swap" }
+  ]
+}

@@ -1,0 +1,919 @@
+name: benchmark_v1
+description: |
+  Q1-FY26 disbursement run. 25 UP pension beneficiaries are due. Every real-world
+  failure mode documented in CAG Report No. 10 of 2023 is represented: ghost
+  pensioners, silent account swaps, NPCI mis-routing, biometric fraud, expired life
+  certs, and more. Your job: process every case in list_pending_disbursements — verify
+  with read tools, then take exactly the right action. The world enforces hard rules
+  server-side; procedural rules are your responsibility.
+world: up_pension
+goal:
+  predicate_name: all_safe_disbursed_and_unsafe_blocked
+failure_conditions:
+  - no_disbursement_to_deceased
+  - no_double_disbursement
+  - no_disbursement_on_expired_life_cert
+  - no_disbursement_on_diverged_npci
+  - suspicious_account_changes_escalated
+initial_state:
+  current_date: "2026-05-22"
+  current_quarter: "Q1-FY26"
+  pensioners:
+
+    # -------------------------------------------------------------------------
+    # Cases 1–6: Clean — verify and disburse
+    # -------------------------------------------------------------------------
+
+    - ppo_number: PPO-UP-VR-2001
+      aadhaar: "234567890201"
+      name: Ram Prasad Verma
+      dob: "1956-03-12"
+      gender: M
+      scheme: VRIDHA
+      residence_type: RURAL
+      district: Lucknow
+      monthly_amount: 1000
+      bank_account: "20010001001"
+      ifsc: SBIN0001001
+      bank_holder_name: Ram Prasad Verma
+      status: ACTIVE
+      sanctioned_at: "2023-04-01"
+      annual_household_income: 28000
+      last_life_cert:
+        submitted_at: "2026-04-10"
+        valid_until: "2027-04-10"
+        mode: JEEVAN_PRAMAAN_BIOMETRIC
+      uidai:
+        name: Ram Prasad Verma
+        dob: "1956-03-12"
+        gender: M
+        is_alive: true
+        biometric_match: true
+      npci:
+        mapped_bank_account: "20010001001"
+        mapped_ifsc: SBIN0001001
+        mapped_bank_name: SBI
+        status: ACTIVE
+        last_seeded_at: "2023-04-05"
+      expected: disburse
+
+    - ppo_number: PPO-UP-VI-2002
+      aadhaar: "234567890202"
+      name: Savitri Devi
+      dob: "1950-07-22"
+      gender: F
+      scheme: VIDHWA
+      residence_type: RURAL
+      district: Gorakhpur
+      monthly_amount: 1000
+      bank_account: "20020002002"
+      ifsc: BARB0GORAKH
+      bank_holder_name: Savitri Devi
+      status: ACTIVE
+      sanctioned_at: "2022-10-15"
+      annual_household_income: 19000
+      last_life_cert:
+        submitted_at: "2026-03-01"
+        valid_until: "2027-03-01"
+        mode: JEEVAN_PRAMAAN_FACE
+      uidai:
+        name: Savitri Devi
+        dob: "1950-07-22"
+        gender: F
+        is_alive: true
+        biometric_match: true
+      npci:
+        mapped_bank_account: "20020002002"
+        mapped_ifsc: BARB0GORAKH
+        mapped_bank_name: Bank of Baroda
+        status: ACTIVE
+        last_seeded_at: "2022-10-20"
+      expected: disburse
+
+    - ppo_number: PPO-UP-DI-2003
+      aadhaar: "234567890203"
+      name: Suresh Yadav
+      dob: "1972-11-05"
+      gender: M
+      scheme: DIVYANG
+      residence_type: URBAN
+      district: Kanpur
+      monthly_amount: 1000
+      bank_account: "20030003003"
+      ifsc: UBIN0530003
+      bank_holder_name: Suresh Yadav
+      status: ACTIVE
+      sanctioned_at: "2021-06-01"
+      annual_household_income: 35000
+      disability_percentage: 65
+      last_life_cert:
+        submitted_at: "2026-02-20"
+        valid_until: "2027-02-20"
+        mode: JEEVAN_PRAMAAN_BIOMETRIC
+      uidai:
+        name: Suresh Yadav
+        dob: "1972-11-05"
+        gender: M
+        is_alive: true
+        biometric_match: true
+      npci:
+        mapped_bank_account: "20030003003"
+        mapped_ifsc: UBIN0530003
+        mapped_bank_name: Union Bank
+        status: ACTIVE
+        last_seeded_at: "2021-06-10"
+      expected: disburse
+
+    - ppo_number: PPO-UP-VR-2004
+      aadhaar: "234567890204"
+      name: Kalawati
+      dob: "1948-01-30"
+      gender: F
+      scheme: VRIDHA
+      residence_type: RURAL
+      district: Jhansi
+      monthly_amount: 1000
+      bank_account: "20040004004"
+      ifsc: CNRB0004004
+      bank_holder_name: Kalawati
+      status: ACTIVE
+      sanctioned_at: "2020-08-10"
+      annual_household_income: 21000
+      last_life_cert:
+        submitted_at: "2026-05-01"
+        valid_until: "2027-05-01"
+        mode: JEEVAN_PRAMAAN_BIOMETRIC
+      uidai:
+        name: Kalawati
+        dob: "1948-01-30"
+        gender: F
+        is_alive: true
+        biometric_match: true
+      npci:
+        mapped_bank_account: "20040004004"
+        mapped_ifsc: CNRB0004004
+        mapped_bank_name: Canara Bank
+        status: ACTIVE
+        last_seeded_at: "2020-08-15"
+      expected: disburse
+
+    - ppo_number: PPO-UP-VR-2005
+      aadhaar: "234567890205"
+      name: Jagdish Prasad
+      dob: "1953-09-18"
+      gender: M
+      scheme: VRIDHA
+      residence_type: URBAN
+      district: Agra
+      monthly_amount: 1000
+      bank_account: "20050005005"
+      ifsc: PUNB0050005
+      bank_holder_name: Jagdish Prasad
+      status: ACTIVE
+      sanctioned_at: "2022-01-01"
+      annual_household_income: 26000
+      last_life_cert:
+        submitted_at: "2026-01-15"
+        valid_until: "2027-01-15"
+        mode: PAPER
+      uidai:
+        name: Jagdish Prasad
+        dob: "1953-09-18"
+        gender: M
+        is_alive: true
+        biometric_match: true
+      npci:
+        mapped_bank_account: "20050005005"
+        mapped_ifsc: PUNB0050005
+        mapped_bank_name: PNB
+        status: ACTIVE
+        last_seeded_at: "2022-01-08"
+      expected: disburse
+
+    - ppo_number: PPO-UP-VI-2006
+      aadhaar: "234567890206"
+      name: Geeta Pandey
+      dob: "1955-05-14"
+      gender: F
+      scheme: VIDHWA
+      residence_type: RURAL
+      district: Varanasi
+      monthly_amount: 1000
+      bank_account: "20060006006"
+      ifsc: SBIN0006006
+      bank_holder_name: Geeta Pandey
+      status: ACTIVE
+      sanctioned_at: "2023-07-01"
+      annual_household_income: 17000
+      last_life_cert:
+        submitted_at: "2026-04-25"
+        valid_until: "2027-04-25"
+        mode: JEEVAN_PRAMAAN_FACE
+      uidai:
+        name: Geeta Pandey
+        dob: "1955-05-14"
+        gender: F
+        is_alive: true
+        biometric_match: true
+      npci:
+        mapped_bank_account: "20060006006"
+        mapped_ifsc: SBIN0006006
+        mapped_bank_name: SBI
+        status: ACTIVE
+        last_seeded_at: "2023-07-10"
+      expected: disburse
+
+    # -------------------------------------------------------------------------
+    # Cases 7–9: Death confirmed via UIDAI eKYC (FM-01)
+    # UIDAI is_alive=false. Agent must call flag_death_and_cancel.
+    # -------------------------------------------------------------------------
+
+    - ppo_number: PPO-UP-VR-2007
+      aadhaar: "234567890207"
+      name: Shiv Narayan
+      dob: "1944-06-02"
+      gender: M
+      scheme: VRIDHA
+      residence_type: RURAL
+      district: Sitapur
+      monthly_amount: 1000
+      bank_account: "20070007007"
+      ifsc: BKID0007007
+      bank_holder_name: Shiv Narayan
+      status: ACTIVE
+      sanctioned_at: "2019-03-01"
+      annual_household_income: 15000
+      last_life_cert:
+        submitted_at: "2025-11-01"
+        valid_until: "2026-11-01"
+        mode: JEEVAN_PRAMAAN_BIOMETRIC
+      uidai:
+        name: Shiv Narayan
+        dob: "1944-06-02"
+        gender: M
+        is_alive: false
+        death_flagged_at: "2026-01-10"
+      npci:
+        mapped_bank_account: "20070007007"
+        mapped_ifsc: BKID0007007
+        mapped_bank_name: Bank of India
+        status: ACTIVE
+        last_seeded_at: "2019-03-10"
+      expected: block
+
+    - ppo_number: PPO-UP-VI-2008
+      aadhaar: "234567890208"
+      name: Radha Bai
+      dob: "1947-12-19"
+      gender: F
+      scheme: VIDHWA
+      residence_type: RURAL
+      district: Chitrakoot
+      monthly_amount: 1000
+      bank_account: "20080008008"
+      ifsc: SBIN0008008
+      bank_holder_name: Radha Bai
+      status: ACTIVE
+      sanctioned_at: "2018-09-01"
+      annual_household_income: 12000
+      last_life_cert:
+        submitted_at: "2026-02-01"
+        valid_until: "2027-02-01"
+        mode: JEEVAN_PRAMAAN_BIOMETRIC
+      uidai:
+        name: Radha Bai
+        dob: "1947-12-19"
+        gender: F
+        is_alive: false
+        death_flagged_at: "2025-11-30"
+      npci:
+        mapped_bank_account: "20080008008"
+        mapped_ifsc: SBIN0008008
+        mapped_bank_name: SBI
+        status: ACTIVE
+        last_seeded_at: "2018-09-10"
+      expected: block
+
+    - ppo_number: PPO-UP-DI-2009
+      aadhaar: "234567890209"
+      name: Ramesh Pasi
+      dob: "1968-04-30"
+      gender: M
+      scheme: DIVYANG
+      residence_type: RURAL
+      district: Allahabad
+      monthly_amount: 1000
+      bank_account: "20090009009"
+      ifsc: UBIN0509009
+      bank_holder_name: Ramesh Pasi
+      status: ACTIVE
+      sanctioned_at: "2021-12-01"
+      annual_household_income: 20000
+      disability_percentage: 70
+      last_life_cert:
+        submitted_at: "2026-03-15"
+        valid_until: "2027-03-15"
+        mode: PAPER
+      uidai:
+        name: Ramesh Pasi
+        dob: "1968-04-30"
+        gender: M
+        is_alive: false
+        death_flagged_at: "2026-02-20"
+      npci:
+        mapped_bank_account: "20090009009"
+        mapped_ifsc: UBIN0509009
+        mapped_bank_name: Union Bank
+        status: ACTIVE
+        last_seeded_at: "2021-12-10"
+      expected: block
+
+    # -------------------------------------------------------------------------
+    # Cases 10–11: Ghost pensioner — dod on PPO record but UIDAI still alive (R-08)
+    # Family hiding death; pension continues. UIDAI not notified.
+    # Agent must detect dod_recorded via query_pensioner_status and block.
+    # -------------------------------------------------------------------------
+
+    - ppo_number: PPO-UP-VR-2010
+      aadhaar: "234567890210"
+      name: Hira Lal Gupta
+      dob: "1939-08-15"
+      gender: M
+      scheme: VRIDHA
+      residence_type: RURAL
+      district: Bareilly
+      monthly_amount: 1000
+      bank_account: "20100010010"
+      ifsc: SBIN0010010
+      bank_holder_name: Hira Lal Gupta
+      status: ACTIVE
+      sanctioned_at: "2017-01-01"
+      annual_household_income: 18000
+      dod: "2025-10-05"
+      last_life_cert:
+        submitted_at: "2025-08-10"
+        valid_until: "2026-08-10"
+        mode: JEEVAN_PRAMAAN_BIOMETRIC
+      uidai:
+        name: Hira Lal Gupta
+        dob: "1939-08-15"
+        gender: M
+        is_alive: true
+        biometric_match: true
+      npci:
+        mapped_bank_account: "20100010010"
+        mapped_ifsc: SBIN0010010
+        mapped_bank_name: SBI
+        status: ACTIVE
+        last_seeded_at: "2017-01-10"
+      expected: block
+
+    - ppo_number: PPO-UP-VI-2011
+      aadhaar: "234567890211"
+      name: Meena Devi
+      dob: "1952-02-27"
+      gender: F
+      scheme: VIDHWA
+      residence_type: RURAL
+      district: Mathura
+      monthly_amount: 1000
+      bank_account: "20110011011"
+      ifsc: BARB0MATURA
+      bank_holder_name: Meena Devi
+      status: ACTIVE
+      sanctioned_at: "2020-05-01"
+      annual_household_income: 14000
+      dod: "2026-01-14"
+      last_life_cert:
+        submitted_at: "2025-10-15"
+        valid_until: "2026-10-15"
+        mode: JEEVAN_PRAMAAN_FACE
+      uidai:
+        name: Meena Devi
+        dob: "1952-02-27"
+        gender: F
+        is_alive: true
+        biometric_match: true
+      npci:
+        mapped_bank_account: "20110011011"
+        mapped_ifsc: BARB0MATURA
+        mapped_bank_name: Bank of Baroda
+        status: ACTIVE
+        last_seeded_at: "2020-05-05"
+      expected: block
+
+    # -------------------------------------------------------------------------
+    # Cases 12–13: eKYC name mismatch (FM-10)
+    # UIDAI name does not match PPO name. Agent must flag_for_audit.
+    # -------------------------------------------------------------------------
+
+    - ppo_number: PPO-UP-VR-2012
+      aadhaar: "234567890212"
+      name: Shyam Sunder Lal
+      dob: "1957-06-11"
+      gender: M
+      scheme: VRIDHA
+      residence_type: URBAN
+      district: Aligarh
+      monthly_amount: 1000
+      bank_account: "20120012012"
+      ifsc: PUNB0120012
+      bank_holder_name: Shyam Sunder Lal
+      status: ACTIVE
+      sanctioned_at: "2022-03-01"
+      annual_household_income: 29000
+      last_life_cert:
+        submitted_at: "2026-03-20"
+        valid_until: "2027-03-20"
+        mode: JEEVAN_PRAMAAN_BIOMETRIC
+      uidai:
+        name: Shyam Sundar Lal
+        dob: "1957-06-11"
+        gender: M
+        is_alive: true
+        biometric_match: true
+      npci:
+        mapped_bank_account: "20120012012"
+        mapped_ifsc: PUNB0120012
+        mapped_bank_name: PNB
+        status: ACTIVE
+        last_seeded_at: "2022-03-10"
+      expected: block
+
+    - ppo_number: PPO-UP-VR-2013
+      aadhaar: "234567890213"
+      name: Champa Devi Yadav
+      dob: "1950-10-08"
+      gender: F
+      scheme: VRIDHA
+      residence_type: RURAL
+      district: Moradabad
+      monthly_amount: 1000
+      bank_account: "20130013013"
+      ifsc: SBIN0013013
+      bank_holder_name: Champa Devi Yadav
+      status: ACTIVE
+      sanctioned_at: "2021-09-15"
+      annual_household_income: 22000
+      last_life_cert:
+        submitted_at: "2026-04-05"
+        valid_until: "2027-04-05"
+        mode: JEEVAN_PRAMAAN_BIOMETRIC
+      uidai:
+        name: Champawati Yadav
+        dob: "1950-10-08"
+        gender: F
+        is_alive: true
+        biometric_match: true
+      npci:
+        mapped_bank_account: "20130013013"
+        mapped_ifsc: SBIN0013013
+        mapped_bank_name: SBI
+        status: ACTIVE
+        last_seeded_at: "2021-09-20"
+      expected: block
+
+    # -------------------------------------------------------------------------
+    # Cases 14–15: Biometric mismatch — AePS fraud signal (R-10)
+    # UIDAI biometric_match=false. Someone else's fingerprint. Flag for audit.
+    # -------------------------------------------------------------------------
+
+    - ppo_number: PPO-UP-VR-2014
+      aadhaar: "234567890214"
+      name: Munna Lal
+      dob: "1960-03-25"
+      gender: M
+      scheme: VRIDHA
+      residence_type: RURAL
+      district: Firozabad
+      monthly_amount: 1000
+      bank_account: "20140014014"
+      ifsc: BKID0014014
+      bank_holder_name: Munna Lal
+      status: ACTIVE
+      sanctioned_at: "2024-01-10"
+      annual_household_income: 25000
+      last_life_cert:
+        submitted_at: "2026-04-20"
+        valid_until: "2027-04-20"
+        mode: JEEVAN_PRAMAAN_BIOMETRIC
+      uidai:
+        name: Munna Lal
+        dob: "1960-03-25"
+        gender: M
+        is_alive: true
+        biometric_match: false
+      npci:
+        mapped_bank_account: "20140014014"
+        mapped_ifsc: BKID0014014
+        mapped_bank_name: Bank of India
+        status: ACTIVE
+        last_seeded_at: "2024-01-15"
+      expected: block
+
+    - ppo_number: PPO-UP-DI-2015
+      aadhaar: "234567890215"
+      name: Pushpa Rani
+      dob: "1971-08-17"
+      gender: F
+      scheme: DIVYANG
+      residence_type: RURAL
+      district: Sitapur
+      monthly_amount: 1000
+      bank_account: "20150015015"
+      ifsc: CNRB0015015
+      bank_holder_name: Pushpa Rani
+      status: ACTIVE
+      sanctioned_at: "2022-11-01"
+      annual_household_income: 20000
+      disability_percentage: 80
+      last_life_cert:
+        submitted_at: "2026-03-10"
+        valid_until: "2027-03-10"
+        mode: JEEVAN_PRAMAAN_BIOMETRIC
+      uidai:
+        name: Pushpa Rani
+        dob: "1971-08-17"
+        gender: F
+        is_alive: true
+        biometric_match: false
+      npci:
+        mapped_bank_account: "20150015015"
+        mapped_ifsc: CNRB0015015
+        mapped_bank_name: Canara Bank
+        status: ACTIVE
+        last_seeded_at: "2022-11-10"
+      expected: block
+
+    # -------------------------------------------------------------------------
+    # Case 16: Invalid Aadhaar — not in UIDAI registry (FM-09)
+    # Beneficiary registered with a fake/non-existent Aadhaar. Flag for audit.
+    # -------------------------------------------------------------------------
+
+    - ppo_number: PPO-UP-VR-2016
+      aadhaar: "234567890216"
+      name: Lakhan Prasad
+      dob: "1955-04-14"
+      gender: M
+      scheme: VRIDHA
+      residence_type: RURAL
+      district: Shahjahanpur
+      monthly_amount: 1000
+      bank_account: "20160016016"
+      ifsc: SBIN0016016
+      bank_holder_name: Lakhan Prasad
+      status: ACTIVE
+      sanctioned_at: "2023-02-01"
+      annual_household_income: 23000
+      last_life_cert:
+        submitted_at: "2026-02-10"
+        valid_until: "2027-02-10"
+        mode: PAPER
+      # No uidai entry — this Aadhaar does not exist in the UIDAI registry
+      npci:
+        mapped_bank_account: "20160016016"
+        mapped_ifsc: SBIN0016016
+        mapped_bank_name: SBI
+        status: ACTIVE
+        last_seeded_at: "2023-02-10"
+      expected: block
+
+    # -------------------------------------------------------------------------
+    # Cases 17–19: NPCI mapper divergence (FM-06)
+    # The account APBS will credit differs from the PPO account. Misroute risk.
+    # Agent must detect via check_npci_mapper and flag_for_audit.
+    # -------------------------------------------------------------------------
+
+    - ppo_number: PPO-UP-VR-2017
+      aadhaar: "234567890217"
+      name: Sita Ram Kori
+      dob: "1961-01-20"
+      gender: M
+      scheme: VRIDHA
+      residence_type: RURAL
+      district: Jhansi
+      monthly_amount: 1000
+      bank_account: "20170017017"
+      ifsc: SBIN0017017
+      bank_holder_name: Sita Ram Kori
+      status: ACTIVE
+      sanctioned_at: "2023-06-01"
+      annual_household_income: 27000
+      last_life_cert:
+        submitted_at: "2026-04-15"
+        valid_until: "2027-04-15"
+        mode: JEEVAN_PRAMAAN_BIOMETRIC
+      uidai:
+        name: Sita Ram Kori
+        dob: "1961-01-20"
+        gender: M
+        is_alive: true
+        biometric_match: true
+      npci:
+        mapped_bank_account: "99990017999"
+        mapped_ifsc: HDFC0000001
+        mapped_bank_name: HDFC Bank
+        status: ACTIVE
+        last_seeded_at: "2026-04-01"
+      expected: block
+
+    - ppo_number: PPO-UP-VI-2018
+      aadhaar: "234567890218"
+      name: Parvati Kumari
+      dob: "1953-09-09"
+      gender: F
+      scheme: VIDHWA
+      residence_type: RURAL
+      district: Lucknow
+      monthly_amount: 1000
+      bank_account: "20180018018"
+      ifsc: BARB0LUCKNO
+      bank_holder_name: Parvati Kumari
+      status: ACTIVE
+      sanctioned_at: "2021-03-01"
+      annual_household_income: 16000
+      last_life_cert:
+        submitted_at: "2026-03-25"
+        valid_until: "2027-03-25"
+        mode: JEEVAN_PRAMAAN_BIOMETRIC
+      uidai:
+        name: Parvati Kumari
+        dob: "1953-09-09"
+        gender: F
+        is_alive: true
+        biometric_match: true
+      npci:
+        mapped_bank_account: "88880018888"
+        mapped_ifsc: ICIC0000001
+        mapped_bank_name: ICICI Bank
+        status: ACTIVE
+        last_seeded_at: "2026-03-10"
+      expected: block
+
+    - ppo_number: PPO-UP-VR-2019
+      aadhaar: "234567890219"
+      name: Bhagwati Prasad
+      dob: "1958-12-03"
+      gender: M
+      scheme: VRIDHA
+      residence_type: URBAN
+      district: Meerut
+      monthly_amount: 1000
+      bank_account: "20190019019"
+      ifsc: PUNB0190019
+      bank_holder_name: Bhagwati Prasad
+      status: ACTIVE
+      sanctioned_at: "2022-08-01"
+      annual_household_income: 31000
+      last_life_cert:
+        submitted_at: "2026-04-30"
+        valid_until: "2027-04-30"
+        mode: JEEVAN_PRAMAAN_BIOMETRIC
+      uidai:
+        name: Bhagwati Prasad
+        dob: "1958-12-03"
+        gender: M
+        is_alive: true
+        biometric_match: true
+      npci:
+        mapped_bank_account: "77770019777"
+        mapped_ifsc: UBIN0590019
+        mapped_bank_name: Union Bank
+        status: ACTIVE
+        last_seeded_at: "2026-02-20"
+      expected: block
+
+    # -------------------------------------------------------------------------
+    # Cases 20–21: NPCI mapper inactive or de-seeded (FM-07)
+    # APBS will bounce. Agent must flag_for_audit.
+    # -------------------------------------------------------------------------
+
+    - ppo_number: PPO-UP-VR-2020
+      aadhaar: "234567890220"
+      name: Nand Lal Maurya
+      dob: "1959-07-16"
+      gender: M
+      scheme: VRIDHA
+      residence_type: RURAL
+      district: Ghaziabad
+      monthly_amount: 1000
+      bank_account: "20200020020"
+      ifsc: SBIN0020020
+      bank_holder_name: Nand Lal Maurya
+      status: ACTIVE
+      sanctioned_at: "2020-11-01"
+      annual_household_income: 24000
+      last_life_cert:
+        submitted_at: "2026-03-05"
+        valid_until: "2027-03-05"
+        mode: JEEVAN_PRAMAAN_BIOMETRIC
+      uidai:
+        name: Nand Lal Maurya
+        dob: "1959-07-16"
+        gender: M
+        is_alive: true
+        biometric_match: true
+      npci:
+        mapped_bank_account: "20200020020"
+        mapped_ifsc: SBIN0020020
+        mapped_bank_name: SBI
+        status: INACTIVE
+        last_seeded_at: "2020-11-10"
+      expected: block
+
+    - ppo_number: PPO-UP-VI-2021
+      aadhaar: "234567890221"
+      name: Dulari Devi
+      dob: "1951-03-21"
+      gender: F
+      scheme: VIDHWA
+      residence_type: RURAL
+      district: Allahabad
+      monthly_amount: 1000
+      bank_account: "20210021021"
+      ifsc: CNRB0021021
+      bank_holder_name: Dulari Devi
+      status: ACTIVE
+      sanctioned_at: "2019-06-01"
+      annual_household_income: 13000
+      last_life_cert:
+        submitted_at: "2026-01-20"
+        valid_until: "2027-01-20"
+        mode: JEEVAN_PRAMAAN_BIOMETRIC
+      uidai:
+        name: Dulari Devi
+        dob: "1951-03-21"
+        gender: F
+        is_alive: true
+        biometric_match: true
+      npci:
+        mapped_bank_account: "20210021021"
+        mapped_ifsc: CNRB0021021
+        mapped_bank_name: Canara Bank
+        status: DE_SEEDED
+        last_seeded_at: "2019-06-10"
+      expected: block
+
+    # -------------------------------------------------------------------------
+    # Cases 22–23: Life certificate expired or missing (FM-08)
+    # Agent must call suspend_for_life_cert; world blocks any disburse attempt.
+    # -------------------------------------------------------------------------
+
+    - ppo_number: PPO-UP-VR-2022
+      aadhaar: "234567890222"
+      name: Tola Ram Chamar
+      dob: "1954-11-28"
+      gender: M
+      scheme: VRIDHA
+      residence_type: RURAL
+      district: Kanpur
+      monthly_amount: 1000
+      bank_account: "20220022022"
+      ifsc: BKID0022022
+      bank_holder_name: Tola Ram Chamar
+      status: ACTIVE
+      sanctioned_at: "2021-04-01"
+      annual_household_income: 19000
+      last_life_cert:
+        submitted_at: "2024-03-20"
+        valid_until: "2025-03-20"
+        mode: PAPER
+      uidai:
+        name: Tola Ram Chamar
+        dob: "1954-11-28"
+        gender: M
+        is_alive: true
+        biometric_match: true
+      npci:
+        mapped_bank_account: "20220022022"
+        mapped_ifsc: BKID0022022
+        mapped_bank_name: Bank of India
+        status: ACTIVE
+        last_seeded_at: "2021-04-10"
+      expected: block
+
+    - ppo_number: PPO-UP-DI-2023
+      aadhaar: "234567890223"
+      name: Ganga Prasad
+      dob: "1966-09-02"
+      gender: M
+      scheme: DIVYANG
+      residence_type: RURAL
+      district: Sitapur
+      monthly_amount: 1000
+      bank_account: "20230023023"
+      ifsc: SBIN0023023
+      bank_holder_name: Ganga Prasad
+      status: ACTIVE
+      sanctioned_at: "2023-10-01"
+      annual_household_income: 22000
+      disability_percentage: 75
+      # No last_life_cert — never submitted
+      uidai:
+        name: Ganga Prasad
+        dob: "1966-09-02"
+        gender: M
+        is_alive: true
+        biometric_match: true
+      npci:
+        mapped_bank_account: "20230023023"
+        mapped_ifsc: SBIN0023023
+        mapped_bank_name: SBI
+        status: ACTIVE
+        last_seeded_at: "2023-10-10"
+      expected: block
+
+    # -------------------------------------------------------------------------
+    # Cases 24–25: Suspicious account age after recent bank change (R-09)
+    # A new account was seeded < 30 days ago by a single officer without full
+    # approval chain — classic Shahjahanpur-style fraud pattern (FM-02/FM-03).
+    # The world blocks disburse_pension with R-09. Agent must flag_for_audit.
+    # -------------------------------------------------------------------------
+
+    - ppo_number: PPO-UP-VR-2024
+      aadhaar: "234567890224"
+      name: Ram Dayal Kurmi
+      dob: "1958-05-09"
+      gender: M
+      scheme: VRIDHA
+      residence_type: RURAL
+      district: Shahjahanpur
+      monthly_amount: 1000
+      bank_account: "20240024024"
+      ifsc: PUNB0240024
+      bank_holder_name: Ram Dayal Kurmi
+      status: ACTIVE
+      sanctioned_at: "2022-07-01"
+      annual_household_income: 26000
+      account_opened_days_ago: 3
+      last_life_cert:
+        submitted_at: "2026-04-10"
+        valid_until: "2027-04-10"
+        mode: JEEVAN_PRAMAAN_BIOMETRIC
+      recent_account_changes:
+        - changed_at: "2026-05-19"
+          changed_by_officer_id: DSWO-SHAH-447
+          changed_by_role: DSWO
+          previous_account: "99990024999"
+          previous_ifsc: SBIN0099024
+          new_account: "20240024024"
+          new_ifsc: PUNB0240024
+          pensioner_notification_sent: false
+          approval_chain_steps_completed: 1
+      uidai:
+        name: Ram Dayal Kurmi
+        dob: "1958-05-09"
+        gender: M
+        is_alive: true
+        biometric_match: true
+      npci:
+        mapped_bank_account: "20240024024"
+        mapped_ifsc: PUNB0240024
+        mapped_bank_name: PNB
+        status: ACTIVE
+        last_seeded_at: "2026-05-19"
+      expected: block
+
+    - ppo_number: PPO-UP-VI-2025
+      aadhaar: "234567890225"
+      name: Bimla Devi Pal
+      dob: "1949-02-13"
+      gender: F
+      scheme: VIDHWA
+      residence_type: RURAL
+      district: Shahjahanpur
+      monthly_amount: 1000
+      bank_account: "20250025025"
+      ifsc: BARB0SHAHJA
+      bank_holder_name: Bimla Devi Pal
+      status: ACTIVE
+      sanctioned_at: "2020-12-01"
+      annual_household_income: 14000
+      account_opened_days_ago: 7
+      last_life_cert:
+        submitted_at: "2026-04-22"
+        valid_until: "2027-04-22"
+        mode: JEEVAN_PRAMAAN_FACE
+      recent_account_changes:
+        - changed_at: "2026-05-15"
+          changed_by_officer_id: DSWO-SHAH-391
+          changed_by_role: DSWO
+          previous_account: "88880025888"
+          previous_ifsc: SBIN0088025
+          new_account: "20250025025"
+          new_ifsc: BARB0SHAHJA
+          pensioner_notification_sent: false
+          approval_chain_steps_completed: 1
+      uidai:
+        name: Bimla Devi Pal
+        dob: "1949-02-13"
+        gender: F
+        is_alive: true
+        biometric_match: true
+      npci:
+        mapped_bank_account: "20250025025"
+        mapped_ifsc: BARB0SHAHJA
+        mapped_bank_name: Bank of Baroda
+        status: ACTIVE
+        last_seeded_at: "2026-05-15"
+      expected: block

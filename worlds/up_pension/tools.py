@@ -163,6 +163,11 @@ def make_tools(state: PensionWorldState, writer: TraceWriter) -> list[BaseTool]:
                 "uidai_name": rec.name,
                 "ppo_name": pensioner.name,
             }
+        if not rec.biometric_match:
+            return {
+                "ekyc_result": EkycResult.BIOMETRIC_MISMATCH.value,
+                "details": "biometric verification failed — fingerprint/iris did not match Aadhaar record",
+            }
         return {
             "ekyc_result": EkycResult.MATCH.value,
             "name": rec.name,
@@ -192,6 +197,17 @@ def make_tools(state: PensionWorldState, writer: TraceWriter) -> list[BaseTool]:
             raise RuleViolation(
                 code=RuleCode.R06_PROCEDURE_OUT_OF_ORDER,
                 reason=f"PPO {ppo_number} not found",
+                ppo_number=ppo_number,
+            )
+
+        # R-09: block disbursement to a freshly-opened account (< 30 days old) with a recent change
+        if p.recent_account_changes and p.account_opened_days_ago < 30:
+            raise RuleViolation(
+                code=RuleCode.R09_SUSPICIOUS_ACCOUNT_AGE,
+                reason=(
+                    f"bank account opened only {p.account_opened_days_ago} day(s) ago "
+                    "after a recent account change — flag for audit before disbursing"
+                ),
                 ppo_number=ppo_number,
             )
 

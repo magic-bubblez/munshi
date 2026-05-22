@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Demo — Munshi</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Noto+Serif+Devanagari:wght@500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="grid-bg" style="display:flex; flex-direction:column; min-height:100vh;">
+
+  <!-- Top bar: logo · breadcrumb · RUN BUTTON -->
+  <header class="px-6 py-4 border-b border-[var(--line)] flex items-center justify-between flex-shrink-0">
+    <div class="flex items-center gap-4">
+      <a href="index.html" class="wordmark text-lg">munshi <span class="devanagari text-base">मुंशी</span></a>
+      <span class="text-[var(--text-muted)] mono text-xs">/ demo</span>
+      <span class="tag tag-amber mono text-[10px]">pre-recorded</span>
+    </div>
+    <!-- Run button lives in the top bar, always visible -->
+    <div class="flex items-center gap-4">
+      <span id="run-status" class="mono text-xs text-[var(--text-dim)]"></span>
+      <button id="reset-btn" class="btn-ghost hidden" style="padding:7px 14px; font-size:12px;">↻ Reset</button>
+      <a href="workbench.html" class="btn-ghost" style="padding:7px 14px; font-size:12px;">Live workbench →</a>
+      <button id="run-btn" class="btn-primary" style="padding:9px 20px; font-size:13px;">▶ Run demo</button>
+    </div>
+  </header>
+
+  <div class="flex flex-1 overflow-hidden">
+
+    <!-- Sidebar -->
+    <aside class="w-56 border-r border-[var(--line)] flex-shrink-0 p-4 overflow-y-auto">
+      <div class="mono text-[10px] tracking-widest text-[var(--text-muted)] uppercase mb-3 px-2">Explore Worlds</div>
+      <div class="sidebar-item active">
+        <div class="flex items-center justify-between">
+          <span>UP Pension</span>
+          <span class="text-[10px] text-[var(--amber)]">●</span>
+        </div>
+      </div>
+      <div class="sidebar-item disabled">UP Property Reg.</div>
+      <div class="sidebar-item disabled">GST Filing</div>
+      <div class="sidebar-item disabled">Passport Renewal</div>
+      <div class="sidebar-item disabled">FASTag Dispute</div>
+      <div class="sidebar-item disabled">Scholarship Disb.</div>
+      <div class="sidebar-item disabled">Ration Card</div>
+      <div class="px-2 py-2 mono text-[10px] text-[var(--text-muted)] italic">+ more to come...</div>
+    </aside>
+
+    <!-- Main area -->
+    <main class="flex-1 flex flex-col overflow-y-auto">
+
+      <!-- World header (always visible, as in the screenshot) -->
+      <div class="px-8 pt-8 pb-6 border-b border-[var(--line)]">
+        <div class="mono text-xs text-[var(--amber)] tracking-widest mb-2 uppercase">// world</div>
+        <h1 class="text-3xl font-semibold mb-1" id="world-name"></h1>
+        <p class="text-[var(--text-dim)]" id="world-subtitle"></p>
+        <div class="mt-4 panel panel-elev p-3 border-l-2 border-l-[var(--amber)] inline-block max-w-2xl">
+          <div class="mono text-[10px] text-[var(--amber)] mb-1">REGIME NOTE</div>
+          <p class="text-sm text-[var(--text-dim)]" id="regime-note"></p>
+        </div>
+
+        <!-- Section tab bar — right below the world header -->
+        <div class="flex gap-0 mt-6 border-b border-[var(--line)]">
+          <button class="section-tab tab active" data-section="agent">Agent</button>
+          <button class="section-tab tab" data-section="world">World</button>
+          <button class="section-tab tab" data-section="scenario">Scenario</button>
+        </div>
+      </div>
+
+      <!-- Section panels — only one visible at a time -->
+      <div class="flex-1 px-8 py-6">
+
+        <!-- AGENT panel (default active) -->
+        <div id="panel-agent" class="section-panel">
+          <div class="mono text-xs text-[var(--amber)] tracking-widest mb-4 uppercase">// agent under test</div>
+          <div class="panel p-6 max-w-3xl">
+            <div class="grid md:grid-cols-2 gap-6 mb-6">
+              <div>
+                <div class="mono text-[10px] text-[var(--text-muted)] uppercase tracking-wider mb-1">Framework</div>
+                <div class="mono text-sm" style="color:#fcd34d" id="agent-framework"></div>
+              </div>
+              <div>
+                <div class="mono text-[10px] text-[var(--text-muted)] uppercase tracking-wider mb-1">Model</div>
+                <div class="mono text-sm" style="color:#fcd34d" id="agent-model"></div>
+              </div>
+              <div>
+                <div class="mono text-[10px] text-[var(--text-muted)] uppercase tracking-wider mb-1">Tools bound</div>
+                <div class="mono text-sm" style="color:#fcd34d" id="agent-tools"></div>
+              </div>
+              <div>
+                <div class="mono text-[10px] text-[var(--text-muted)] uppercase tracking-wider mb-1">Connector</div>
+                <div class="mono text-sm" style="color:#fcd34d">In-process · MCP-compatible</div>
+              </div>
+            </div>
+            <div class="panel-elev p-4 mono text-xs text-[var(--text-dim)] leading-relaxed mb-5" id="agent-prompt"></div>
+            <div class="flex flex-wrap gap-3">
+              <button class="btn-golden">
+                Bring your own agent
+                <span class="badge">V2</span>
+              </button>
+              <button class="btn-golden">
+                Connect via MCP endpoint
+                <span class="badge">V2</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- WORLD panel (hidden by default) -->
+        <div id="panel-world" class="section-panel hidden">
+          <div class="flex border-b border-[var(--line)] mb-6">
+            <div class="tab active" data-tab="tools">Tools</div>
+            <div class="tab" data-tab="rules">Rules</div>
+            <div class="tab" data-tab="schemas">Schemas</div>
+            <div class="tab" data-tab="failure_modes">Failure Modes</div>
+          </div>
+          <div id="tab-tools" class="tab-content"><div class="grid md:grid-cols-2 gap-3" id="tools-grid"></div></div>
+          <div id="tab-rules" class="tab-content hidden"><div class="space-y-3" id="rules-list"></div></div>
+          <div id="tab-schemas" class="tab-content hidden"><div class="space-y-3" id="schemas-list"></div></div>
+          <div id="tab-failure_modes" class="tab-content hidden"><div class="space-y-3" id="fm-list"></div></div>
+        </div>
+
+        <!-- SCENARIO panel (hidden by default) -->
+        <div id="panel-scenario" class="section-panel hidden">
+          <div class="mono text-xs text-[var(--amber)] tracking-widest mb-2 uppercase">// scenario</div>
+          <h2 class="text-xl font-semibold mb-1" id="scenario-name"></h2>
+          <p class="text-[var(--text-dim)] text-sm mb-6 max-w-2xl" id="scenario-description"></p>
+          <div class="grid md:grid-cols-2 gap-3" id="pensioners-grid"></div>
+        </div>
+
+        <!-- RESULTS panel (hidden until run) -->
+        <div id="panel-results" class="section-panel hidden mt-2">
+          <div class="mono text-xs text-[var(--amber)] tracking-widest mb-4 uppercase">// results</div>
+
+          <!-- Scoreboard -->
+          <div class="grid md:grid-cols-3 gap-4 mb-8" id="scoreboard"></div>
+
+          <!-- Per-pensioner outcomes -->
+          <div class="mono text-xs text-[var(--text-muted)] uppercase tracking-wider mb-3">Per-case outcomes</div>
+          <div class="space-y-3 mb-8" id="outcomes-list"></div>
+
+          <!-- Run summary -->
+          <div class="panel p-4 mono text-xs">
+            <div class="text-[var(--amber)] mb-2">// run summary</div>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-[var(--text-dim)]">
+              <div>duration: <span class="text-[var(--text)]" id="sum-duration"></span></div>
+              <div>tool calls: <span class="text-[var(--text)]" id="sum-tool-calls"></span></div>
+              <div>tokens: <span class="text-[var(--text)]" id="sum-tokens"></span></div>
+              <div>cost: <span class="text-[var(--text)]" id="sum-dollars"></span></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

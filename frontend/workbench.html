@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Workbench — Munshi</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Noto+Serif+Devanagari:wght@500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .wb-tab { padding: 10px 20px; font-size: 13px; font-family: var(--mono); color: var(--text-dim); cursor: pointer; border-bottom: 2px solid transparent; transition: all .15s; }
+    .wb-tab:hover { color: var(--text); }
+    .wb-tab.active { color: var(--amber); border-bottom-color: var(--amber); }
+    .wb-panel { display: none; }
+    .wb-panel.active { display: block; }
+    .trace-event { display: flex; gap: 12px; padding: 8px 0; border-bottom: 1px solid var(--line); font-size: 11px; font-family: var(--mono); }
+    .trace-event:last-child { border-bottom: none; }
+    .trace-ts { color: var(--text-muted); min-width: 80px; flex-shrink: 0; }
+    .trace-kind { min-width: 96px; flex-shrink: 0; padding: 1px 6px; border-radius: 3px; height: fit-content; font-size: 10px; }
+    .kind-tool_call { background: rgba(245,158,11,.12); color: var(--amber); }
+    .kind-tool_result { background: rgba(16,185,129,.1); color: var(--green); }
+    .kind-rule_violation { background: rgba(239,68,68,.12); color: var(--red); }
+    .kind-state_delta { background: rgba(99,102,241,.12); color: #818cf8; }
+    .kind-agent_message { background: rgba(148,163,184,.1); color: var(--text-dim); }
+    .lb-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .lb-table th { text-align: left; font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: .05em; color: var(--text-muted); padding: 6px 12px 10px; border-bottom: 1px solid var(--line); }
+    .lb-table td { padding: 10px 12px; border-bottom: 1px solid var(--line); color: var(--text-dim); }
+    .lb-table tr:hover td { background: var(--bg-elev-1); cursor: pointer; }
+    .lb-table .rank { color: var(--text-muted); font-family: var(--mono); font-size: 11px; }
+    .lb-table .agent-name { color: var(--text); font-family: var(--mono); }
+    .lb-table .score-high { color: var(--green); font-family: var(--mono); }
+    .lb-table .score-mid { color: var(--amber); font-family: var(--mono); }
+    .lb-table .score-low { color: var(--red); font-family: var(--mono); }
+    code.snippet { display: block; background: var(--bg-elev-1); border: 1px solid var(--line); border-radius: 6px; padding: 16px; font-family: var(--mono); font-size: 12px; line-height: 1.7; color: var(--text-dim); white-space: pre; overflow-x: auto; }
+    code.snippet .kw { color: #c084fc; }
+    code.snippet .str { color: #86efac; }
+    code.snippet .cm { color: var(--text-muted); }
+    .copy-btn { font-family: var(--mono); font-size: 11px; padding: 4px 10px; border: 1px solid var(--line); border-radius: 4px; color: var(--text-muted); cursor: pointer; background: transparent; transition: all .15s; }
+    .copy-btn:hover { border-color: var(--amber); color: var(--amber); }
+  </style>
+</head>
+<body class="grid-bg" style="display:flex; flex-direction:column; min-height:100vh;">
+
+  <!-- Header -->
+  <header class="px-6 border-b border-[var(--line)] flex-shrink-0">
+    <div class="flex items-center justify-between pt-4 pb-0">
+      <div class="flex items-center gap-4">
+        <a href="index.html" class="wordmark text-lg">munshi <span class="devanagari text-base">मुंशी</span></a>
+        <span class="text-[var(--text-muted)] mono text-xs">/ workbench</span>
+        <span class="tag tag-amber mono text-[10px]">live</span>
+      </div>
+      <div class="flex items-center gap-3">
+        <a href="demo.html" class="btn-ghost" style="padding:7px 14px; font-size:12px;">View demo →</a>
+        <div id="backend-status" class="mono text-[11px] text-[var(--text-muted)] flex items-center gap-1.5">
+          <span class="w-1.5 h-1.5 rounded-full bg-[var(--text-muted)] inline-block" id="status-dot"></span>
+          <span id="status-text">connecting…</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab bar -->
+    <div class="flex mt-3">
+      <button class="wb-tab active" data-panel="connect">Connect</button>
+      <button class="wb-tab" data-panel="world">World</button>
+      <button class="wb-tab" data-panel="scenario">Scenario</button>
+      <button class="wb-tab" data-panel="leaderboard">Leaderboard</button>
+      <button class="wb-tab" data-panel="traces">Traces</button>
+    </div>
+  </header>
+
+  <main class="flex-1 overflow-y-auto px-8 py-8 max-w-5xl mx-auto w-full">
+
+    <!-- ── CONNECT ─────────────────────────────────────────────────────── -->
+    <div id="panel-connect" class="wb-panel active">
+
+      <div class="mono text-xs text-[var(--amber)] tracking-widest mb-6 uppercase">// connect your agent</div>
+
+      <div class="grid md:grid-cols-2 gap-8 mb-10">
+        <div>
+          <div class="mono text-[10px] text-[var(--text-muted)] uppercase tracking-wider mb-2">MCP Endpoint (SSE)</div>
+          <div class="panel p-4 flex items-center justify-between gap-3">
+            <code class="mono text-sm text-[var(--amber)] break-all" id="mcp-url-display"></code>
+            <button class="copy-btn" id="copy-mcp-url">copy</button>
+          </div>
+          <p class="text-xs text-[var(--text-muted)] mt-2 mono">Each connection gets an isolated fresh world state.</p>
+        </div>
+        <div>
+          <div class="mono text-[10px] text-[var(--text-muted)] uppercase tracking-wider mb-2">Health</div>
+          <div class="panel p-4 mono text-xs" id="health-display">
+            <span class="text-[var(--text-muted)]">fetching…</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="mono text-[10px] text-[var(--text-muted)] uppercase tracking-wider mb-3">Getting started</div>
+
+      <div class="flex gap-2 mb-4">
+        <button class="copy-btn active" id="snip-tab-py" style="color: var(--amber); border-color: var(--amber);">Python · LangGraph</button>
+        <button class="copy-btn" id="snip-tab-any">Any MCP client</button>
+      </div>
+
+      <div id="snip-py">
+        <div class="flex items-center justify-between mb-2">
+          <span class="mono text-[10px] text-[var(--text-muted)]">agents/my_agent.py</span>
+          <button class="copy-btn" id="copy-snip-py">copy</button>
+        </div>
+        <code class="snippet" id="snip-py-code"></code>
+      </div>
+
+      <div id="snip-any" style="display:none">
+        <div class="flex items-center justify-between mb-2">
+          <span class="mono text-[10px] text-[var(--text-muted)]">any MCP-compatible client</span>
+        </div>
+        <code class="snippet" id="snip-any-code"></code>
+      </div>
+
+      <div class="mt-8 panel p-5 border-l-2 border-l-[var(--amber)] max-w-2xl">
+        <div class="mono text-[10px] text-[var(--amber)] mb-2">HOW SCORING WORKS</div>
+        <p class="text-sm text-[var(--text-dim)] leading-relaxed">
+          When your agent finishes processing all cases, call <code class="mono text-[var(--amber)]">submit_run(agent_name)</code>.
+          The world scores your run across three axes — completion, compliance, efficiency — and publishes it
+          to the public leaderboard. Each connection starts a fresh isolated world so runs don't interfere.
+        </p>
+      </div>
+    </div>
+
+    <!-- ── WORLD ──────────────────────────────────────────────────────── -->
+    <div id="panel-world" class="wb-panel">
+      <div class="mono text-xs text-[var(--amber)] tracking-widest mb-6 uppercase">// up pension disbursement world</div>
+
+      <div class="flex gap-0 border-b border-[var(--line)] mb-6">
+        <div class="tab active" data-wtab="tools">Tools</div>
+        <div class="tab" data-wtab="rules">Rules</div>
+        <div class="tab" data-wtab="schemas">Schemas</div>
+        <div class="tab" data-wtab="failure_modes">Failure Modes</div>
+      </div>
+
+      <div id="wtab-tools"><div class="grid md:grid-cols-2 gap-3" id="tools-grid"></div></div>
+      <div id="wtab-rules" class="hidden"><div class="space-y-3" id="rules-list"></div></div>
+      <div id="wtab-schemas" class="hidden"><div class="space-y-3" id="schemas-list"></div></div>
+      <div id="wtab-failure_modes" class="hidden"><div class="space-y-3" id="fm-list"></div></div>
+    </div>
+
+    <!-- ── SCENARIO ──────────────────────────────────────────────────── -->
+    <div id="panel-scenario" class="wb-panel">
+      <div class="mono text-xs text-[var(--amber)] tracking-widest mb-2 uppercase">// benchmark_v1</div>
+      <h2 class="text-xl font-semibold mb-1">25 cases · Q1-FY26</h2>
+      <p class="text-[var(--text-dim)] text-sm mb-6 max-w-2xl">
+        Every real-world failure mode from CAG Report No. 10 of 2023. Six clean cases to disburse.
+        Nineteen adversarial cases: ghost pensioners, silent account swaps, biometric fraud,
+        NPCI misrouting, expired life certs, suspicious account age.
+      </p>
+      <div class="grid md:grid-cols-2 gap-3" id="pensioners-grid"></div>
+    </div>
+
+    <!-- ── LEADERBOARD ───────────────────────────────────────────────── -->
+    <div id="panel-leaderboard" class="wb-panel">
+      <div class="flex items-center justify-between mb-6">
+        <div class="mono text-xs text-[var(--amber)] tracking-widest uppercase">// public leaderboard</div>
+        <button class="copy-btn" id="lb-refresh">↻ refresh</button>
+      </div>
+
+      <div id="lb-content">
+        <div class="mono text-xs text-[var(--text-muted)]">Loading…</div>
+      </div>
+    </div>
+
+    <!-- ── TRACES ────────────────────────────────────────────────────── -->
+    <div id="panel-traces" class="wb-panel">
+      <div class="mono text-xs text-[var(--amber)] tracking-widest mb-6 uppercase">// trace replay</div>
+
+      <div class="flex gap-3 mb-8">
+        <input id="trace-run-id" type="text" placeholder="Run ID (e.g. A3F72B1C)"
+          class="panel px-3 py-2 mono text-sm flex-1 max-w-xs outline-none"
+          style="background: var(--bg-elev-1); color: var(--text); border: 1px solid var(--line);">
+        <button id="trace-load-btn" class="btn-primary" style="padding:8px 18px; font-size:13px;">Load</button>
+      </div>
+
+      <div id="trace-content">
+        <p class="mono text-xs text-[var(--text-muted)]">Enter a run ID from the leaderboard to replay its trace.</p>
+      </div>
+    </div>
+
+  </main>
+
+  <script src="workbench.js"></script>
+</body>
+</html>
