@@ -1,0 +1,46 @@
+{
+  "name": "UP Pension Disbursement",
+  "id": "up_pension",
+  "subtitle": "Vridha (old age) · Vidhwa (widow) · Divyang (disability) — pre-2025 control regime",
+  "regime_note": "Simulating the pre-2025 control regime — before the post-Chitrakoot Treasury SOP. This is when the famous scams actually happened.",
+  "tools": [
+    { "name": "list_pending_disbursements", "purpose": "Get the batch of pensioners due this quarter" },
+    { "name": "query_pensioner_status", "purpose": "Read one pensioner's full record (PPO, bank, NPCI, life cert, recent changes, audit flags)" },
+    { "name": "verify_aadhaar_ekyc", "purpose": "UIDAI check — returns death flag, name match, demographics" },
+    { "name": "check_npci_mapper", "purpose": "Look up the account NPCI will actually credit (last-seeded-wins)" },
+    { "name": "disburse_pension", "purpose": "Trigger the quarterly payment. World enforces R-03/R-04/R-07 server-side" },
+    { "name": "flag_death_and_cancel", "purpose": "Cancel a deceased pensioner's PPO" },
+    { "name": "suspend_for_life_cert", "purpose": "Suspend a pensioner whose annual life cert is expired" },
+    { "name": "flag_for_audit", "purpose": "Mark a suspicious case for human audit" }
+  ],
+  "rules": [
+    { "code": "R-03", "name": "KYC + Aadhaar seeding valid", "blocks": "Disbursement when UIDAI invalid, NPCI inactive, or NPCI account ≠ PPO account" },
+    { "code": "R-04", "name": "Life certificate unexpired + no death flag", "blocks": "Disbursement to deceased or life-cert-expired pensioners" },
+    { "code": "R-06", "name": "Procedural ordering", "blocks": "Out-of-order calls (e.g. disburse before sanction)" },
+    { "code": "R-07", "name": "One disbursement per (PPO, quarter)", "blocks": "Double-payment in the same cycle" },
+    { "code": "R-08", "name": "Death-flag propagation within one cycle", "blocks": "Payments to pensioners flagged deceased by UIDAI / panchayat / bank" }
+  ],
+  "schemas": [
+    { "name": "Pensioner", "fields": "ppo_number, aadhaar, name, dob, gender, scheme, district, bank_account, ifsc, status, last_life_cert, dod, recent_account_changes, audit_flags" },
+    { "name": "UIDAIRecord", "fields": "aadhaar, name, dob, gender, is_alive, death_flagged_at" },
+    { "name": "NPCIMapping", "fields": "aadhaar, mapped_bank_account, mapped_ifsc, mapped_bank_name, status, last_seeded_at" },
+    { "name": "DisbursementRecord", "fields": "ppa_id, ppo_number, quarter, amount, outcome, bank_credit_account, disbursed_at, rejection_code" },
+    { "name": "BankAccountChange", "fields": "changed_at, changed_by_officer_id, changed_by_role, previous_account, new_account, pensioner_notification_sent, approval_chain_steps_completed" }
+  ],
+  "failure_modes": [
+    { "code": "FM-01", "name": "Ghost pensioner", "evidence": "CAG NSAP 2023: Rs 2 cr to 2,103 deceased across 26 states" },
+    { "code": "FM-02", "name": "Treasury insider rerouting", "evidence": "Chitrakoot UP: Rs 43.13 cr SIT FIR, up to Rs 120 cr exposure" },
+    { "code": "FM-03", "name": "Welfare officer account swap", "evidence": "Shahjahanpur UP: 2,390 victims, Rs 2.52 cr, Rs 4.49 cr assets attached" },
+    { "code": "FM-04", "name": "Ineligible inclusion", "evidence": "CAG NSAP 2023: Rs 79 cr to ineligible across India" },
+    { "code": "FM-05", "name": "Duplicate beneficiary", "evidence": "CAG Aasara: 5,650 double-dippers (Telangana proxy)" },
+    { "code": "FM-06", "name": "NPCI last-seeded-wins misroute", "evidence": "UIDAI/PFMS documentation — structural risk" },
+    { "code": "FM-07", "name": "DBT bounce/reversal", "evidence": "PFMS rejection taxonomy" },
+    { "code": "FM-08", "name": "Life certificate bypass", "evidence": "Chitrakoot scam used fake paper certificates" }
+  ],
+  "agent": {
+    "framework": "LangGraph (StateGraph + ReAct loop)",
+    "model": "claude-sonnet-4-6 via Anthropic API",
+    "tools_bound": 8,
+    "system_prompt_excerpt": "You are a Pension Disbursement Officer for UP. For every pensioner: query → verify_aadhaar → check_npci → inspect recent_account_changes + life_cert → decide one action."
+  }
+}

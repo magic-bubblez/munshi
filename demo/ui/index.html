@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Munshi — Testbed for AI Agents on Indian Bureaucratic Workflows</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Noto+Serif+Devanagari:wght@500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="grid-bg scanline">
+
+  <!-- Nav -->
+  <nav class="relative z-10 px-8 py-5 flex items-center justify-between border-b border-[var(--line)]">
+    <div class="flex items-center gap-3">
+      <span class="wordmark text-xl">munshi <span class="devanagari text-lg">मुंशी</span></span>
+      <span class="tag tag-amber">v0.1</span>
+    </div>
+    <div class="flex items-center gap-6">
+      <a href="#worlds" class="mono text-sm text-[var(--text-dim)] hover:text-[var(--amber)] transition">/worlds</a>
+      <a href="#how" class="mono text-sm text-[var(--text-dim)] hover:text-[var(--amber)] transition">/how</a>
+      <a href="workbench.html" class="btn-primary" style="padding: 9px 18px; font-size: 13px;">Enter workbench →</a>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="relative min-h-[88vh] flex flex-col items-center justify-center px-8 overflow-hidden">
+    <div class="hero-glow" style="top: -100px; right: -100px; width: 600px; height: 600px;"></div>
+    <div class="hero-glow" style="bottom: -100px; left: -300px; width: 500px; height: 500px;"></div>
+
+    <div class="relative z-10 max-w-4xl text-center">
+
+      <div class="mono text-xs text-[var(--amber)] tracking-widest mb-8 uppercase">
+        // AI agent testbed · Indian bureaucratic workflows
+      </div>
+
+      <h1 class="text-6xl md:text-[88px] font-semibold leading-[1.0] tracking-tight mb-8">
+        Test your agent<br>
+        against a bureaucracy<br>
+        <span class="text-[var(--amber)]">that bites back.<span class="cursor"></span></span>
+      </h1>
+
+      <p class="text-base md:text-lg text-[var(--text-dim)] max-w-2xl mx-auto mb-10 leading-relaxed">
+        High-fidelity simulations of Indian government workflows — every tool, rule, and failure mode sourced from real audits. Test your agent here, before production does.
+      </p>
+
+      <div class="flex items-center justify-center gap-4">
+        <a href="workbench.html" class="btn-primary">Try it out →</a>
+        <a href="#how" class="btn-ghost">See how it works</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- How -->
+  <section id="how" class="relative z-10 px-8 py-24 max-w-6xl mx-auto border-t border-[var(--line)]">
+    <div class="mono text-xs text-[var(--amber)] tracking-widest mb-3 uppercase">// how it works</div>
+    <h2 class="text-4xl font-semibold mb-12">Four things. One run.</h2>
+
+    <div class="grid md:grid-cols-4 gap-4">
+      <div class="panel p-5 border-t-2 border-t-[var(--amber)]">
+        <div class="mono text-3xl text-[var(--amber)] font-semibold mb-3">01</div>
+        <h3 class="font-semibold mb-2">World</h3>
+        <p class="text-sm text-[var(--text-dim)]">A simulation of one Indian bureaucratic domain — tools, rules, schemas, real failure modes. Modeled from CAG audits and RTI records.</p>
+      </div>
+      <div class="panel p-5 border-t-2 border-t-[var(--amber)]">
+        <div class="mono text-3xl text-[var(--amber)] font-semibold mb-3">02</div>
+        <h3 class="font-semibold mb-2">Agent</h3>
+        <p class="text-sm text-[var(--text-dim)]">Your agent, any framework. It calls the world's tools over MCP. A reference LangGraph + Claude agent ships with every world.</p>
+      </div>
+      <div class="panel p-5 border-t-2 border-t-[var(--amber)]">
+        <div class="mono text-3xl text-[var(--amber)] font-semibold mb-3">03</div>
+        <h3 class="font-semibold mb-2">Scenario</h3>
+        <p class="text-sm text-[var(--text-dim)]">A batch of cases — clean and adversarial — seeded from real failure modes. Define what success means. The world enforces the rest.</p>
+      </div>
+      <div class="panel p-5 border-t-2 border-t-[var(--amber)]">
+        <div class="mono text-3xl text-[var(--amber)] font-semibold mb-3">04</div>
+        <h3 class="font-semibold mb-2">Scoreboard</h3>
+        <p class="text-sm text-[var(--text-dim)]">Three axes: did it reach the goal, did it respect the rules, what did it cost. Full trace of every tool call and rule violation.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Worlds -->
+  <section id="worlds" class="relative z-10 px-8 py-24 max-w-6xl mx-auto border-t border-[var(--line)]">
+    <div class="mono text-xs text-[var(--amber)] tracking-widest mb-3 uppercase">// world library</div>
+    <h2 class="text-4xl font-semibold mb-5">Worlds in scope.</h2>
+    <p class="text-[var(--text-dim)] max-w-2xl mb-10 leading-relaxed">
+      <span class="text-[var(--text)]">A library of high-fidelity simulated worlds for Indian government workflows.</span>
+      Users bring agents from any framework. Agents call into the world via a typed tool protocol (MCP).
+      The testbed runs them, scores them, and lets them replay traces.
+    </p>
+
+    <div class="grid md:grid-cols-4 gap-3">
+      <a href="workbench.html" class="panel p-5 border-l-2 border-l-[var(--amber)] hover:bg-[var(--bg-elev-2)] transition col-span-1">
+        <div class="mono text-[10px] text-[var(--amber)] mb-2">● LIVE</div>
+        <h3 class="font-semibold mb-1">UP Pension Disbursement</h3>
+        <p class="text-xs text-[var(--text-dim)]">Vridha · Vidhwa · Divyang. 8 tools, 8 rules, Rs 43 cr scam reproduced.</p>
+      </a>
+      <div class="panel p-4 opacity-40"><div class="mono text-[10px] text-[var(--text-muted)] mb-2">SOON</div><div class="text-sm font-medium">UP Property Registration</div></div>
+      <div class="panel p-4 opacity-40"><div class="mono text-[10px] text-[var(--text-muted)] mb-2">SOON</div><div class="text-sm font-medium">GST Filing</div></div>
+      <div class="panel p-4 opacity-40"><div class="mono text-[10px] text-[var(--text-muted)] mb-2">SOON</div><div class="text-sm font-medium">Passport Renewal</div></div>
+      <div class="panel p-4 opacity-40"><div class="mono text-[10px] text-[var(--text-muted)] mb-2">SOON</div><div class="text-sm font-medium">FASTag Dispute</div></div>
+      <div class="panel p-4 opacity-40"><div class="mono text-[10px] text-[var(--text-muted)] mb-2">SOON</div><div class="text-sm font-medium">Scholarship Disbursement</div></div>
+      <div class="panel p-4 opacity-40"><div class="mono text-[10px] text-[var(--text-muted)] mb-2">SOON</div><div class="text-sm font-medium">Ration Card Update</div></div>
+      <div class="panel p-4 opacity-20 flex items-center justify-center"><span class="mono text-xs text-[var(--text-muted)]">+ more →</span></div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="relative z-10 px-8 py-24 border-t border-[var(--line)] text-center">
+    <h2 class="text-5xl font-semibold mb-4">Drop your agent in.</h2>
+    <p class="text-[var(--text-dim)] mb-8">See what it actually does.</p>
+    <a href="workbench.html" class="btn-primary">Enter the workbench →</a>
+  </section>
+
+  <footer class="relative z-10 px-8 py-6 border-t border-[var(--line)] mono text-xs text-[var(--text-muted)] flex items-center justify-between">
+    <div>munshi · 2026</div>
+    <div>worlds sourced from CAG NSAP 2023 · SIT Chitrakoot · UIDAI / PFMS / NPCI docs</div>
+  </footer>
+
+</body>
+</html>
