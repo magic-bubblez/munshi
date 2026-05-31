@@ -43,6 +43,41 @@
     main .text-xs { font-size: 14px; }
     main .text-sm { font-size: 16px; }
     main .text-xl { font-size: 22px; }
+    /* World sidebar */
+    .wb-sidebar {
+      width: 196px;
+      flex-shrink: 0;
+      border-right: 1px solid var(--line);
+      overflow-y: auto;
+      background: var(--bg);
+      padding: 16px 0;
+    }
+    .wb-sidebar-label {
+      padding: 0 16px 10px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-muted);
+    }
+    .wb-world-item {
+      display: block;
+      padding: 9px 16px;
+      border-left: 2px solid transparent;
+      color: var(--text-dim);
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .wb-world-item:hover { color: var(--text); background: var(--bg-elev); }
+    .wb-world-item.active { color: var(--amber); border-left-color: var(--amber); background: var(--bg-elev); }
+    .wb-world-item.disabled { opacity: 0.35; cursor: not-allowed; pointer-events: none; }
+    .wb-world-sub {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
   </style>
 </head>
 <body class="grid-bg" style="display:flex; flex-direction:column; min-height:100vh;">
@@ -74,7 +109,32 @@
     </div>
   </header>
 
-  <main class="flex-1 overflow-y-auto px-8 py-8 max-w-5xl mx-auto w-full">
+  <div style="display:flex; flex:1; overflow:hidden;">
+
+  <!-- World sidebar -->
+  <aside class="wb-sidebar">
+    <div class="wb-sidebar-label">Worlds</div>
+
+    <div class="wb-world-item active" id="wb-world-up-pension">
+      <div class="flex items-center justify-between">
+        <span>UP Pension</span>
+        <span style="font-size:8px; color:var(--amber)">●</span>
+      </div>
+      <div class="wb-world-sub">Disbursement</div>
+    </div>
+    <div class="wb-world-item disabled">
+      <div>UP Property Reg.</div>
+    </div>
+    <div class="wb-world-item disabled">GST Filing</div>
+    <div class="wb-world-item disabled">Passport Renewal</div>
+    <div class="wb-world-item disabled">FASTag Dispute</div>
+    <div class="wb-world-item disabled">Scholarship</div>
+    <div class="wb-world-item disabled">Ration Card</div>
+
+    <div style="padding:16px 16px 0; font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--text-muted); font-style:italic">+ more coming</div>
+  </aside>
+
+  <main class="flex-1 overflow-y-auto px-8 py-8" style="max-width:none;">
 
     <!-- ── CONNECT ─────────────────────────────────────────────────────── -->
     <div id="panel-connect" class="wb-panel active">
@@ -188,6 +248,7 @@
     </div>
 
   </main>
+  </div><!-- end flex content area -->
 
   <script src="workbench.js"></script>
 </body>

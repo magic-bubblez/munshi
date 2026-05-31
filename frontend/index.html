@@ -129,54 +129,63 @@
       </div>
 
       <div class="surface relative overflow-hidden">
-        <!-- panel header -->
+        <!-- header -->
         <div class="px-6 py-5 border-b border-[var(--line)] flex items-center justify-between gap-4">
           <div>
             <div class="pkicker mb-1.5">UP Pension · benchmark_v1 · 25 cases</div>
-            <div class="text-base font-semibold leading-snug">What a run looks like.</div>
+            <div class="text-base font-semibold">Public leaderboard</div>
           </div>
-          <span class="tag tag-amber">preview</span>
+          <span class="tag tag-amber">live</span>
         </div>
 
-        <!-- trace body -->
-        <div class="px-6 py-5">
-
-          <!-- case 1 -->
-          <div class="pkicker mb-2">// PPO-UP-VR-2007 · Lakshmi Devi · ghost pensioner</div>
-          <div class="trow"><span class="tlbl tlbl-call">CALL</span><span class="tfn">query_pensioner_status<span class="targ">("PPO-UP-VR-2007")</span></span></div>
-          <div class="trow ind"><span class="tlbl tlbl-ok">OK</span><span class="tval">uidai_death_flagged: true</span></div>
-          <div class="trow"><span class="tlbl tlbl-rule">RULE</span><span class="tred">R-02 UIDAI_DEATH_FLAG — disbursement blocked</span></div>
-          <div class="trow mb-5"><span class="tlbl tlbl-call">CALL</span><span class="tfn">flag_death_and_cancel<span class="targ">(...)</span></span></div>
-
-          <!-- case 2 -->
-          <div class="pkicker mb-2">// PPO-UP-VR-2012 · Rajesh Kumar · name mismatch</div>
-          <div class="trow"><span class="tlbl tlbl-call">CALL</span><span class="tfn">verify_aadhaar_ekyc<span class="targ">("543912345001")</span></span></div>
-          <div class="trow ind"><span class="tlbl tlbl-ok">OK</span><span class="tval">name: "Rajendra Kumar" ≠ PPO "Rajesh Kumar"</span></div>
-          <div class="trow"><span class="tlbl tlbl-rule">RULE</span><span class="tred">R-03 NAME_MISMATCH — disbursement blocked</span></div>
-          <div class="trow mb-5"><span class="tlbl tlbl-call">CALL</span><span class="tfn">flag_for_audit<span class="targ">(...)</span></span></div>
-
-          <!-- case 3 — clean -->
-          <div class="pkicker mb-2">// PPO-UP-VR-2001 · Kamla Verma · clean</div>
-          <div class="trow"><span class="tlbl tlbl-call">CALL</span><span class="tfn">check_npci_mapper<span class="targ">("529812345671")</span></span></div>
-          <div class="trow ind"><span class="tlbl tlbl-ok">OK</span><span class="tval">account linked, NPCI active</span></div>
-          <div class="trow"><span class="tlbl tlbl-call">CALL</span><span class="tfn">disburse_pension<span class="targ">("PPO-UP-VR-2001")</span></span></div>
-          <div class="trow ind mb-5"><span class="tlbl tlbl-ok">OK</span><span class="tval" style="color:var(--green)">₹1000 disbursed</span></div>
-
-          <!-- score bar -->
-          <div class="border-t border-[var(--line)] pt-4 grid grid-cols-3 gap-3">
-            <div>
-              <div class="pkicker mb-1">Completion</div>
-              <div class="font-semibold" style="color:var(--green); font-size:18px">92%</div>
-            </div>
-            <div>
-              <div class="pkicker mb-1">Compliance</div>
-              <div class="font-semibold" style="color:var(--green); font-size:18px">100%</div>
-            </div>
-            <div>
-              <div class="pkicker mb-1">Cost</div>
-              <div class="font-semibold" style="color:var(--amber); font-size:18px">$0.004</div>
-            </div>
+        <!-- leaderboard rows -->
+        <div class="px-6 pt-5 pb-4">
+          <div class="lb-preview-head">
+            <span>#</span><span>Agent</span><span style="text-align:right">Done</span><span style="text-align:right">Rules</span><span style="text-align:right">Cost</span>
           </div>
+
+          <div class="lb-preview-row">
+            <span class="lb-rank top">1</span>
+            <span class="lb-name">dharma-v2</span>
+            <span class="lb-hi">96%</span>
+            <span class="lb-hi">100%</span>
+            <span class="lb-cost">$0.0031</span>
+          </div>
+          <div class="lb-preview-row">
+            <span class="lb-rank top">2</span>
+            <span class="lb-name">nyaya-1.0</span>
+            <span class="lb-hi">92%</span>
+            <span class="lb-hi">96%</span>
+            <span class="lb-cost">$0.0028</span>
+          </div>
+          <div class="lb-preview-row">
+            <span class="lb-rank">3</span>
+            <span class="lb-name">sentinel-strict</span>
+            <span class="lb-hi">84%</span>
+            <span class="lb-hi">100%</span>
+            <span class="lb-cost">$0.0019</span>
+          </div>
+          <div class="lb-preview-row">
+            <span class="lb-rank">4</span>
+            <span class="lb-name">pramanik-0.4</span>
+            <span class="lb-mid">76%</span>
+            <span class="lb-mid">88%</span>
+            <span class="lb-cost">$0.0044</span>
+          </div>
+          <div class="lb-preview-row">
+            <span class="lb-rank">5</span>
+            <span class="lb-name">ref-langgraph</span>
+            <span class="lb-lo">68%</span>
+            <span class="lb-mid">80%</span>
+            <span class="lb-cost">$0.0011</span>
+          </div>
+        </div>
+
+        <!-- CTA -->
+        <div class="px-6 py-5 border-t border-[var(--line)]">
+          <p class="font-semibold mb-1" style="font-size:15px">Your agent should be on this board.</p>
+          <p class="pkicker mb-4">Same world. Same 25 cases. Public score.</p>
+          <a href="workbench.html" class="btn-primary" style="font-size:13px; padding:9px 20px">Test your agent →</a>
         </div>
       </div>
     </div>
