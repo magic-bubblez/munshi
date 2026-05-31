@@ -73,7 +73,7 @@ async def run(agent_name: str, mcp_url: str) -> None:
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--mcp-url", default=_MCP_URL, help="MCP SSE endpoint")
-    parser.add_argument("--agent-name", default="single-react-v1")
+    parser.add_argument("mcp_url", nargs="?", default=_MCP_URL)
+    parser.add_argument("agent_name", nargs="?", default="single-react-v1")
     args = parser.parse_args()
     asyncio.run(run(args.agent_name, args.mcp_url))
