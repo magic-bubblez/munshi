@@ -21,11 +21,14 @@ import asyncio
 import json
 import os
 
+from dotenv import load_dotenv
 from langchain_anthropic import ChatAnthropic
 from langchain_core.messages import HumanMessage, SystemMessage
 from langchain_mcp_adapters.client import MultiServerMCPClient
 from langchain_mcp_adapters.tools import load_mcp_tools
 from langgraph.prebuilt import create_react_agent
+
+load_dotenv()
 
 _MCP_URL = os.environ.get("MUNSHI_MCP_URL", "http://localhost:8000/mcp/up_pension/sse")
 _MODEL = os.environ.get("MUNSHI_MODEL", "claude-haiku-4-5-20251001")
