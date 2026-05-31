@@ -1,79 +1,82 @@
 # Munshi
 
-A testbed for AI agent teams working on Indian bureaucratic workflows. You bring an agent team; Munshi gives you a simulated world to test it in, plus a scoreboard and a replay trace.
+A testbed for Indian bureaucratic agentic workflows.
+
+High-fidelity simulations of Indian government workflows — every tool, rule, and failure mode sourced from real audits. You bring an agent; Munshi runs it, scores it, and gives you a full trace.
+
+**Live:** https://munshi-alpha.vercel.app/
+
+---
 
 ## How it works
 
-1. Pick a world (UP pension disbursement, property registration, GST filing, passport renewal etc. 100s of templates).
-2. Bring an agent team. Any framework that can speak the MCP works.
-3. Define a scenario — initial state + success criteria + failure conditions.
-4. Munshi runs the agent against the world, scores the run on **completion**, **rule compliance**, and **cost**, and emits a replay trace.
+1. **World** — a simulation of one procedural domain. Typed MCP tools, enforced rules, failure modes from real audit records.
+2. **Connect** — your agent connects over MCP (SSE or stdio). Any framework.
+3. **Investigate** — the agent calls tools to probe world state: query records, verify identities, cross-check entitlements.
+4. **Decide** — the agent acts. No guardrails. It owns the outcome.
+5. **World enforces** — every action passes through the rule engine. Violations are caught and returned as structured rule codes.
+6. **Score** — three axes: goal reached, rules upheld, cost used. Full replayable trace.
+
+---
 
 ## Architecture
 
-The codebase has two layers, and only two:
+- **`worlds/<name>/`** — a self-contained world bundle: schemas, tools, rules, scorers, scenarios, seed data. Portable. Addable without touching anything else.
+- **`backend/`** — FastAPI server. Exposes the world over MCP at `/mcp/<world>/sse`. Per-connection world isolation.
+- **`agents/`** — reference agents shipped with the UP pension world: single ReAct, parallel per-case, compliance-layered.
+- **`frontend/`** — static site (Vercel). Live workbench, scenario browser, leaderboard, trace replay.
 
-- **`munshi/`** — platform package. World-agnostic primitives only: the base `Scenario` model, the `Scorer` interface, the LangGraph → Inspect AI solver wrapper, the Task factory.
-- **`worlds/<name>/`** — a fully self-contained world bundle. Owns its own research, schemas, tools, rules, scorers, scenarios, and reference agents. Portable. Removable. Addable without touching anything else.
+---
 
-The platform never imports from a world; worlds import from the platform. The dependency direction is the scalability guarantee.
+## World: UP Pension Disbursement
 
-## An example World (currently implemented)
+Vridha · Vidhwa · Divyang schemes. 8 tools, 10 rules, 25 benchmark cases.
 
-### `worlds/up_pension/`
+Failure modes modeled from CAG Report No. 10 of 2023, SIT Chitrakoot, and UIDAI/PFMS/NPCI documentation:
 
-Uttar Pradesh social pension disbursement — Vridha, Vidhwa, and Divyang schemes.
+- Ghost pensioners (deceased, UIDAI death-flagged)
+- Biometric mismatch (AePS fraud vector)
+- NPCI mapper diverged or inactive
+- Silent account swap after recent account change
+- Life certificate expired or missing
+- Name mismatch between PPO and Aadhaar record
+- Invalid or unlinked Aadhaar
 
-Models the famous failure modes flagged in CAG audits and RTI investigations:
+---
 
-- Ghost pensioners (deceased beneficiaries still receiving disbursements)
-- Expired or unverified KYC
-- Duplicate Aadhaar linking across accounts
-- DBT bounces from stale IFSC or Aadhaar-seed mismatch
-- Wrong scheme assignment
-- Double disbursement within a cycle
-
-The world exposes its tools over an MCP server. The reference agent in `worlds/up_pension/agents/default/` is a LangGraph multi-agent team built specifically to handle these cases correctly.
-
-## Tech stack
+## Stack
 
 | Layer | Choice |
-| --- | --- |
-| World / tool surface | FastMCP (MCP server) |
-| Schemas and state | Pydantic v2 |
-| Agent framework (reference agent) | LangGraph |
-| Model | Claude Sonnet 4.6 via Anthropic API |
-| Eval harness | Inspect AI |
-| Replay UI | Inspect View (built-in) |
+|---|---|
+| World tools | FastMCP |
+| Schemas | Pydantic v2 |
+| API | FastAPI + uvicorn |
+| Reference agent | LangGraph + Claude Sonnet 4.6 |
+| Frontend | Vanilla JS + Tailwind CDN |
+| Deploy | EC2 (backend) · Vercel (frontend) |
 
-## Running
+---
+
+## Running locally
 
 ```bash
-# install
-uv pip install -e .
+pip install -e .
+export ANTHROPIC_API_KEY=sk-...
 
-# set up the model
-cp .env.example .env  # add ANTHROPIC_API_KEY
+# start the backend
+uvicorn backend.main:app --reload
 
-# run the testbed against the UP pension world
-inspect eval worlds/up_pension/task.py
-
-# open the replay UI
-inspect view
+# run a reference agent
+python -m agents.single
 ```
 
-## Status
+---
 
-MVP build. One world (UP pension), one reference agent team, one scenario triggering multiple famous failure modes, three default scorers. The architecture is built for the subsequent worlds to be added without restructuring.
+## Worlds in scope
 
-## Roadmap
-
-Each world is a research project as much as a software project. Future worlds in scope:
-
-- UP property registration
-- GST filing (small business path)
-- Passport renewal
-- FASTag dispute resolution
-- Scholarship disbursement
-- Ration card update
-- FIR filing
+- UP Property Registration
+- GST Filing
+- Passport Renewal
+- FASTag Dispute
+- Scholarship Disbursement
+- Ration Card Update
