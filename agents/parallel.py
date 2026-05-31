@@ -56,6 +56,9 @@ _WORKER_TOOLS = {
 
 
 def _parse_result(raw: object) -> dict:
+    # MCP content-block list: [{"type": "text", "text": "..."}]
+    if isinstance(raw, list) and raw and isinstance(raw[0], dict) and "text" in raw[0]:
+        raw = raw[0]["text"]
     if isinstance(raw, str):
         try:
             return json.loads(raw)

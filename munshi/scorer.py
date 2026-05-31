@@ -73,9 +73,10 @@ class GoalReachedScorer:
                 explanation=f"goal predicate '{predicate_name}' not registered by world",
             )
         result = self._predicates[predicate_name](final_state, trace)
+        value = result.details.get("completion_score", 1.0 if result.passed else 0.0)
         return Score(
             axis=self.axis,
-            value=1.0 if result.passed else 0.0,
+            value=value,
             passed=result.passed,
             breakdown=result.details,
             explanation=result.reason,

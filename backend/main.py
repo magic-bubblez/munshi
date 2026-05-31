@@ -139,10 +139,11 @@ async def _get_session(ctx: Context) -> _Session:
 
 def _score_session(session: _Session) -> dict:
     scenario = load_scenario(_SCENARIO_PATH)
+    state_dict = session.state.model_dump(mode="json")
 
-    goal_score = GoalReachedScorer(PREDICATES).score(session.state, session.writer.trace, scenario)
-    rule_score = RulesUpheldScorer(PREDICATES).score(session.state, session.writer.trace, scenario)
-    cost_score = CostUsedScorer(dollar_threshold=10.0).score(session.state, session.writer.trace, scenario)
+    goal_score = GoalReachedScorer(PREDICATES).score(state_dict, session.writer.trace, scenario)
+    rule_score = RulesUpheldScorer(PREDICATES).score(state_dict, session.writer.trace, scenario)
+    cost_score = CostUsedScorer(dollar_threshold=10.0).score(state_dict, session.writer.trace, scenario)
 
     tool_calls = cost_score.breakdown.get("tool_calls", 0)
     cost_usd = cost_score.breakdown.get("dollars", 0.0)

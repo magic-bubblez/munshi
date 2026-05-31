@@ -97,14 +97,18 @@ class AllSafeCasesDisbursedAndUnsafeBlocked:
             elif not (handled_status or had_violation or was_pre_paid):
                 misses.append(f"{ppo} was neither disbursed nor handled (no status change, no violation)")
 
+        total = len(expected_disburse) + len(expected_block)
+        partial_score = (total - len(misses)) / total if total > 0 else 1.0
+
         return PredicateResult(
             passed=len(misses) == 0,
-            reason="all cases handled correctly" if not misses else f"{len(misses)} issues",
+            reason="all cases handled correctly" if not misses else f"{len(misses)}/{total} issues",
             details={
                 "expected_disburse": expected_disburse,
                 "expected_block": expected_block,
                 "agent_disbursed_ppos": sorted(agent_disbursed_ppos),
                 "misses": misses,
+                "completion_score": partial_score,
             },
         )
 

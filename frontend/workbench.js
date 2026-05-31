@@ -1,10 +1,12 @@
 // munshi live workbench
 
-const _BACKEND = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
-  ? 'http://localhost:8000'
-  : '';
+const _IS_LOCAL = !window.location.hostname
+  || window.location.hostname === 'localhost'
+  || window.location.hostname === '127.0.0.1';
 
-const _MCP_SSE = `${_BACKEND}/mcp/up_pension/sse`;
+const _BACKEND  = _IS_LOCAL ? 'http://localhost:8000' : '';
+const _EC2      = 'http://51.21.191.238:8000';
+const _MCP_SSE  = (_IS_LOCAL ? 'http://localhost:8000' : _EC2) + '/mcp/up_pension/sse';
 
 const $ = (sel) => document.querySelector(sel);
 const $$ = (sel) => Array.from(document.querySelectorAll(sel));
