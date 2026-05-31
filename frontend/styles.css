@@ -265,139 +265,53 @@ html, body {
 }
 .tab:hover { color: var(--text); }
 
-/* ── Pipeline / How it works ─────────────────────────────────────── */
-.pipeline-section {
+/* ── How it works cards ───────────────────────────────────────────── */
+.how-card {
   position: relative;
-  z-index: 10;
-  padding: 96px 0;
-  border-top: 1px solid var(--line);
-  background-color: var(--bg-elev);
-  background-image:
-    linear-gradient(rgba(245, 158, 11, 0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(245, 158, 11, 0.05) 1px, transparent 1px);
-  background-size: 32px 32px;
-  overflow: hidden;
-}
-
-.pipeline-glow {
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(ellipse 70% 60% at 50% 50%, rgba(245, 158, 11, 0.07) 0%, transparent 100%);
-  pointer-events: none;
-}
-
-.pipeline-inner {
-  max-width: 960px;
-  margin: 0 auto;
-  padding: 0 48px;
-}
-
-.pipeline-track {
-  position: relative;
-  margin-top: 64px;
-}
-
-.pipeline-vline {
-  position: absolute;
-  left: 50%;
-  top: 24px;
-  bottom: 24px;
-  width: 1px;
-  transform: translateX(-50%);
-  background: linear-gradient(
-    to bottom,
-    transparent 0%,
-    rgba(245, 158, 11, 0.55) 5%,
-    rgba(245, 158, 11, 0.3) 95%,
-    transparent 100%
-  );
-}
-
-.pipeline-step {
-  display: grid;
-  grid-template-columns: 1fr 48px 1fr;
-  align-items: center;
-  column-gap: 36px;
-  margin-bottom: 52px;
-}
-.pipeline-step:last-child { margin-bottom: 0; }
-
-.pipeline-node {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  border: 1px solid rgba(245, 158, 11, 0.6);
   background: var(--bg-elev);
-  color: var(--amber);
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 0 0 5px rgba(245, 158, 11, 0.05), 0 0 28px rgba(245, 158, 11, 0.14);
-  position: relative;
-  z-index: 2;
-  flex-shrink: 0;
-}
-
-.pipeline-card {
-  background: var(--bg);
   border: 1px solid var(--line);
+  border-left: 2px solid var(--amber);
   border-radius: 4px;
-  padding: 24px 28px;
-  position: relative;
+  padding: 32px 28px 40px;
   overflow: hidden;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  transition: background 0.15s ease;
 }
-.pipeline-card:hover {
-  border-color: var(--line-strong);
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
-}
-
-.pipeline-card .card-tag {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 10px;
-  color: var(--amber);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  opacity: 0.55;
-  display: block;
-  margin-bottom: 10px;
-}
-
-.pipeline-card h3 {
-  font-size: 15px;
-  font-weight: 600;
-  color: var(--text);
-  margin: 0 0 8px;
-}
-
-.pipeline-card p {
-  font-size: 13px;
-  color: var(--text-dim);
-  line-height: 1.65;
-  margin: 0;
-}
-
-.pipeline-card .step-bg-num {
+.how-card:hover { background: var(--bg-elev-2); }
+.how-card::before {
+  content: attr(data-num);
   position: absolute;
-  right: 14px;
-  bottom: -14px;
+  top: -8px;
+  right: 16px;
   font-family: 'JetBrains Mono', monospace;
-  font-size: 84px;
+  font-size: 100px;
   font-weight: 700;
-  color: rgba(245, 158, 11, 0.04);
+  color: rgba(245, 158, 11, 0.05);
   line-height: 1;
   pointer-events: none;
   user-select: none;
 }
-
-.step-left  .pipeline-card { border-right: 2px solid var(--amber); }
-.step-right .pipeline-card { border-left:  2px solid var(--amber); }
-
-.pipeline-spacer { /* intentional empty grid cell */ }
+.how-num {
+  display: block;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--amber);
+  letter-spacing: 0.06em;
+  opacity: 0.6;
+  margin-bottom: 20px;
+}
+.how-card h3 {
+  font-size: 21px;
+  font-weight: 600;
+  color: var(--text);
+  margin: 0 0 12px;
+}
+.how-card p {
+  font-size: 15px;
+  color: var(--text-dim);
+  line-height: 1.72;
+  margin: 0;
+}
 
 /* Loader */
 .loader-dot {

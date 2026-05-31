@@ -10,35 +10,39 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="styles.css">
   <style>
-    .wb-tab { padding: 10px 20px; font-size: 13px; font-family: var(--mono); color: var(--text-dim); cursor: pointer; border-bottom: 2px solid transparent; transition: all .15s; }
+    .wb-tab { padding: 10px 20px; font-size: 15px; font-family: var(--mono); color: var(--text-dim); cursor: pointer; border-bottom: 2px solid transparent; transition: all .15s; }
     .wb-tab:hover { color: var(--text); }
     .wb-tab.active { color: var(--amber); border-bottom-color: var(--amber); }
     .wb-panel { display: none; }
     .wb-panel.active { display: block; }
-    .trace-event { display: flex; gap: 12px; padding: 8px 0; border-bottom: 1px solid var(--line); font-size: 11px; font-family: var(--mono); }
+    .trace-event { display: flex; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--line); font-size: 13px; font-family: var(--mono); }
     .trace-event:last-child { border-bottom: none; }
-    .trace-ts { color: var(--text-muted); min-width: 80px; flex-shrink: 0; }
-    .trace-kind { min-width: 96px; flex-shrink: 0; padding: 1px 6px; border-radius: 3px; height: fit-content; font-size: 10px; }
+    .trace-ts { color: var(--text-muted); min-width: 88px; flex-shrink: 0; }
+    .trace-kind { min-width: 96px; flex-shrink: 0; padding: 2px 7px; border-radius: 3px; height: fit-content; font-size: 12px; }
     .kind-tool_call { background: rgba(245,158,11,.12); color: var(--amber); }
     .kind-tool_result { background: rgba(16,185,129,.1); color: var(--green); }
     .kind-rule_violation { background: rgba(239,68,68,.12); color: var(--red); }
     .kind-state_delta { background: rgba(99,102,241,.12); color: #818cf8; }
     .kind-agent_message { background: rgba(148,163,184,.1); color: var(--text-dim); }
-    .lb-table { width: 100%; border-collapse: collapse; font-size: 13px; }
-    .lb-table th { text-align: left; font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: .05em; color: var(--text-muted); padding: 6px 12px 10px; border-bottom: 1px solid var(--line); }
-    .lb-table td { padding: 10px 12px; border-bottom: 1px solid var(--line); color: var(--text-dim); }
+    .lb-table { width: 100%; border-collapse: collapse; font-size: 15px; }
+    .lb-table th { text-align: left; font-family: var(--mono); font-size: 12px; text-transform: uppercase; letter-spacing: .05em; color: var(--text-muted); padding: 6px 12px 10px; border-bottom: 1px solid var(--line); }
+    .lb-table td { padding: 11px 12px; border-bottom: 1px solid var(--line); color: var(--text-dim); }
     .lb-table tr:hover td { background: var(--bg-elev-1); cursor: pointer; }
-    .lb-table .rank { color: var(--text-muted); font-family: var(--mono); font-size: 11px; }
+    .lb-table .rank { color: var(--text-muted); font-family: var(--mono); font-size: 13px; }
     .lb-table .agent-name { color: var(--text); font-family: var(--mono); }
     .lb-table .score-high { color: var(--green); font-family: var(--mono); }
     .lb-table .score-mid { color: var(--amber); font-family: var(--mono); }
     .lb-table .score-low { color: var(--red); font-family: var(--mono); }
-    code.snippet { display: block; background: var(--bg-elev-1); border: 1px solid var(--line); border-radius: 6px; padding: 16px; font-family: var(--mono); font-size: 12px; line-height: 1.7; color: var(--text-dim); white-space: pre; overflow-x: auto; }
+    code.snippet { display: block; background: var(--bg-elev-1); border: 1px solid var(--line); border-radius: 6px; padding: 18px; font-family: var(--mono); font-size: 14px; line-height: 1.75; color: var(--text-dim); white-space: pre; overflow-x: auto; }
     code.snippet .kw { color: #c084fc; }
     code.snippet .str { color: #86efac; }
     code.snippet .cm { color: var(--text-muted); }
-    .copy-btn { font-family: var(--mono); font-size: 11px; padding: 4px 10px; border: 1px solid var(--line); border-radius: 4px; color: var(--text-muted); cursor: pointer; background: transparent; transition: all .15s; }
+    .copy-btn { font-family: var(--mono); font-size: 13px; padding: 5px 12px; border: 1px solid var(--line); border-radius: 4px; color: var(--text-muted); cursor: pointer; background: transparent; transition: all .15s; }
     .copy-btn:hover { border-color: var(--amber); color: var(--amber); }
+    /* Bump Tailwind text utilities in main content */
+    main .text-xs { font-size: 14px; }
+    main .text-sm { font-size: 16px; }
+    main .text-xl { font-size: 22px; }
   </style>
 </head>
 <body class="grid-bg" style="display:flex; flex-direction:column; min-height:100vh;">

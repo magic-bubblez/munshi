@@ -155,35 +155,35 @@ async function renderWorld() {
   const world = await res.json();
 
   $('#tools-grid').innerHTML = world.tools.map((t, i) => `
-    <div class="panel p-4">
-      <div class="flex items-start justify-between mb-1">
-        <code class="mono text-sm text-[var(--amber)]">${t.name}</code>
-        <span class="mono text-[10px] text-[var(--text-muted)]">T-${String(i+1).padStart(2,'0')}</span>
+    <div class="panel p-5">
+      <div class="flex items-start justify-between mb-2">
+        <code class="mono text-base text-[var(--amber)]">${t.name}</code>
+        <span class="mono text-xs text-[var(--text-muted)]">T-${String(i+1).padStart(2,'0')}</span>
       </div>
-      <p class="text-sm text-[var(--text-dim)]">${t.purpose}</p>
+      <p class="text-base text-[var(--text-dim)]" style="line-height:1.65">${t.purpose}</p>
     </div>`).join('');
 
   $('#rules-list').innerHTML = world.rules.map(r => `
-    <div class="panel p-4 flex gap-4">
-      <div class="mono text-xs text-[var(--amber)] min-w-[44px] mt-0.5">${r.code}</div>
+    <div class="panel p-5 flex gap-5">
+      <div class="mono text-sm text-[var(--amber)] min-w-[52px] mt-0.5 shrink-0">${r.code}</div>
       <div>
-        <div class="font-semibold text-sm mb-1">${r.name}</div>
-        <p class="text-sm text-[var(--text-dim)]">Blocks: ${r.blocks}</p>
+        <div class="font-semibold text-base mb-1">${r.name}</div>
+        <p class="text-base text-[var(--text-dim)]" style="line-height:1.65">Blocks: ${r.blocks}</p>
       </div>
     </div>`).join('');
 
   $('#schemas-list').innerHTML = world.schemas.map(s => `
-    <div class="panel p-4">
-      <div class="mono text-sm text-[var(--amber)] mb-2">${s.name}</div>
-      <div class="mono text-xs text-[var(--text-dim)]">${s.fields}</div>
+    <div class="panel p-5">
+      <div class="mono text-base text-[var(--amber)] mb-3">${s.name}</div>
+      <div class="mono text-sm text-[var(--text-dim)]" style="line-height:1.7">${s.fields}</div>
     </div>`).join('');
 
   $('#fm-list').innerHTML = world.failure_modes.map(fm => `
-    <div class="panel p-4 flex gap-4">
-      <div class="mono text-xs text-[var(--amber)] min-w-[44px] mt-0.5">${fm.code}</div>
+    <div class="panel p-5 flex gap-5">
+      <div class="mono text-sm text-[var(--amber)] min-w-[52px] mt-0.5 shrink-0">${fm.code}</div>
       <div>
-        <div class="font-semibold text-sm mb-1">${fm.name}</div>
-        <p class="text-xs text-[var(--text-dim)]"><span class="mono text-[var(--text-muted)]">EVIDENCE:</span> ${fm.evidence}</p>
+        <div class="font-semibold text-base mb-1">${fm.name}</div>
+        <p class="text-base text-[var(--text-dim)]" style="line-height:1.65"><span class="mono text-[var(--text-muted)]">EVIDENCE:</span> ${fm.evidence}</p>
       </div>
     </div>`).join('');
 }
@@ -208,18 +208,18 @@ async function renderScenario() {
   const scenario = await res.json();
 
   $('#pensioners-grid').innerHTML = scenario.pensioners.map(p => `
-    <div class="panel p-4">
+    <div class="panel p-5">
       <div class="flex items-start justify-between mb-2">
         <div>
-          <div class="font-semibold">${p.name}</div>
-          <div class="mono text-[11px] text-[var(--text-muted)]">${p.ppo}</div>
+          <div class="font-semibold text-base">${p.name}</div>
+          <div class="mono text-sm text-[var(--text-muted)] mt-0.5">${p.ppo}</div>
         </div>
         <span class="tag ${_TAG[p.tag] || 'tag-info'}">${p.expected}</span>
       </div>
-      <div class="mono text-[11px] text-[var(--text-dim)] mb-2">${p.scheme} · ${p.district}</div>
+      <div class="mono text-sm text-[var(--text-dim)] mb-3">${p.scheme} · ${p.district}</div>
       ${p.anomaly
-        ? `<p class="text-sm border-l-2 border-l-[var(--red)] pl-3">${p.anomaly}</p>`
-        : `<p class="text-sm text-[var(--text-muted)] italic">clean — should disburse</p>`}
+        ? `<p class="text-base border-l-2 border-l-[var(--red)] pl-3" style="line-height:1.65">${p.anomaly}</p>`
+        : `<p class="text-base text-[var(--text-muted)] italic">clean — should disburse</p>`}
     </div>`).join('');
 }
 
