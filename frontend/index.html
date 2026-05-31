@@ -3,12 +3,81 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Munshi — Testbed for AI Agents on Indian Bureaucratic Workflows</title>
+  <title>Munshi — Benchmark for Indian Bureaucratic Agents</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Noto+Serif+Devanagari:wght@500;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="styles.css">
+  <style>
+    .surface {
+      background: linear-gradient(180deg, rgba(19, 19, 17, 0.98), rgba(12, 12, 11, 0.96));
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.35);
+    }
+    .metric-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 12px;
+      border: 1px solid var(--line-strong);
+      border-radius: 999px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: var(--text-dim);
+      background: rgba(255, 255, 255, 0.02);
+      white-space: nowrap;
+    }
+    .hero-kicker {
+      font-family: 'JetBrains Mono', monospace;
+      text-transform: uppercase;
+      letter-spacing: 0.22em;
+      color: var(--amber);
+      font-size: 13px;
+      opacity: 0.82;
+    }
+    .hero-note {
+      font-size: 17px;
+      line-height: 1.75;
+      color: var(--text-dim);
+      max-width: 44rem;
+    }
+    .pkicker {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--text-muted);
+    }
+    /* Trace preview inside hero panel */
+    .trow {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      padding: 3px 0;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+    }
+    .trow.ind { padding-left: 50px; }
+    .tlbl {
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      min-width: 40px;
+      padding: 2px 5px;
+      border-radius: 2px;
+      flex-shrink: 0;
+      text-align: center;
+    }
+    .tlbl-call   { background: rgba(245,158,11,0.12); color: var(--amber); }
+    .tlbl-ok     { background: rgba(132,204,22,0.10); color: var(--green); }
+    .tlbl-rule   { background: rgba(239,68,68,0.12);  color: var(--red);   }
+    .tfn  { color: var(--text); }
+    .targ { color: var(--text-muted); }
+    .tval { color: var(--text-dim); }
+    .tred { color: var(--red); }
+  </style>
 </head>
 <body class="grid-bg scanline">
 
@@ -27,29 +96,86 @@
   </nav>
 
   <!-- Hero -->
-  <section class="relative min-h-[88vh] flex flex-col items-center justify-center px-8 overflow-hidden">
-    <div class="hero-glow" style="top: -100px; right: -100px; width: 600px; height: 600px;"></div>
-    <div class="hero-glow" style="bottom: -100px; left: -300px; width: 500px; height: 500px;"></div>
+  <section class="relative min-h-[88vh] flex items-center px-8 overflow-hidden">
+    <div class="hero-glow" style="top: -140px; right: -140px; width: 640px; height: 640px;"></div>
+    <div class="hero-glow" style="bottom: -120px; left: -320px; width: 520px; height: 520px;"></div>
 
-    <div class="relative z-10 max-w-4xl text-center">
+    <div class="relative z-10 w-full max-w-7xl mx-auto grid lg:grid-cols-[1.08fr_0.92fr] gap-12 lg:gap-16 items-center py-16">
+      <div class="max-w-3xl">
+        <div class="hero-kicker mb-6">MUNSHI</div>
 
-      <div class="wordmark text-[var(--amber)] tracking-widest mb-6 uppercase" style="font-size:28px; letter-spacing:0.22em; opacity:0.85">
-        MUNSHI
+        <h1 class="text-5xl md:text-[74px] font-semibold leading-[1.02] tracking-tight mb-7 max-w-4xl">
+          A benchmark for Indian bureaucratic agents
+        </h1>
+
+        <p class="hero-note mb-9">
+          Run agents against high-fidelity government workflow simulations. Every run is scored on completion, compliance, and cost, then replayed in full.
+        </p>
+
+        <div class="flex flex-wrap gap-3 mb-9">
+          <span class="metric-chip">1 live world</span>
+          <span class="metric-chip">25 benchmark cases</span>
+          <span class="metric-chip">10 server-side rules</span>
+          <span class="metric-chip">public leaderboard</span>
+          <span class="metric-chip">full replay trace</span>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-4">
+          <a href="workbench.html" class="btn-primary">Test your agent →</a>
+          <a href="demo.html" class="btn-ghost">Watch a demo</a>
+        </div>
       </div>
 
-      <h1 class="text-5xl md:text-[72px] font-semibold leading-[1.08] tracking-tight mb-7">
-        A testbed for Indian<br>
-        bureaucratic<br>
-        <span class="text-[var(--amber)]">Agentic Workflows.<span class="cursor"></span></span>
-      </h1>
+      <div class="surface relative overflow-hidden">
+        <!-- panel header -->
+        <div class="px-6 py-5 border-b border-[var(--line)] flex items-center justify-between gap-4">
+          <div>
+            <div class="pkicker mb-1.5">UP Pension · benchmark_v1 · 25 cases</div>
+            <div class="text-base font-semibold leading-snug">What a run looks like.</div>
+          </div>
+          <span class="tag tag-amber">preview</span>
+        </div>
 
-      <p class="text-[var(--text-dim)] max-w-2xl mx-auto mb-10" style="font-size:17px; line-height:1.75">
-        High-fidelity simulations of Indian government workflows — every tool, rule, and failure mode sourced from real audits.
-      </p>
+        <!-- trace body -->
+        <div class="px-6 py-5">
 
-      <div class="flex items-center justify-center gap-4">
-        <a href="workbench.html" class="btn-primary">Test your agent →</a>
-        <a href="demo.html" class="btn-ghost">Watch a demo</a>
+          <!-- case 1 -->
+          <div class="pkicker mb-2">// PPO-UP-VR-2007 · Lakshmi Devi · ghost pensioner</div>
+          <div class="trow"><span class="tlbl tlbl-call">CALL</span><span class="tfn">query_pensioner_status<span class="targ">("PPO-UP-VR-2007")</span></span></div>
+          <div class="trow ind"><span class="tlbl tlbl-ok">OK</span><span class="tval">uidai_death_flagged: true</span></div>
+          <div class="trow"><span class="tlbl tlbl-rule">RULE</span><span class="tred">R-02 UIDAI_DEATH_FLAG — disbursement blocked</span></div>
+          <div class="trow mb-5"><span class="tlbl tlbl-call">CALL</span><span class="tfn">flag_death_and_cancel<span class="targ">(...)</span></span></div>
+
+          <!-- case 2 -->
+          <div class="pkicker mb-2">// PPO-UP-VR-2012 · Rajesh Kumar · name mismatch</div>
+          <div class="trow"><span class="tlbl tlbl-call">CALL</span><span class="tfn">verify_aadhaar_ekyc<span class="targ">("543912345001")</span></span></div>
+          <div class="trow ind"><span class="tlbl tlbl-ok">OK</span><span class="tval">name: "Rajendra Kumar" ≠ PPO "Rajesh Kumar"</span></div>
+          <div class="trow"><span class="tlbl tlbl-rule">RULE</span><span class="tred">R-03 NAME_MISMATCH — disbursement blocked</span></div>
+          <div class="trow mb-5"><span class="tlbl tlbl-call">CALL</span><span class="tfn">flag_for_audit<span class="targ">(...)</span></span></div>
+
+          <!-- case 3 — clean -->
+          <div class="pkicker mb-2">// PPO-UP-VR-2001 · Kamla Verma · clean</div>
+          <div class="trow"><span class="tlbl tlbl-call">CALL</span><span class="tfn">check_npci_mapper<span class="targ">("529812345671")</span></span></div>
+          <div class="trow ind"><span class="tlbl tlbl-ok">OK</span><span class="tval">account linked, NPCI active</span></div>
+          <div class="trow"><span class="tlbl tlbl-call">CALL</span><span class="tfn">disburse_pension<span class="targ">("PPO-UP-VR-2001")</span></span></div>
+          <div class="trow ind mb-5"><span class="tlbl tlbl-ok">OK</span><span class="tval" style="color:var(--green)">₹1000 disbursed</span></div>
+
+          <!-- score bar -->
+          <div class="border-t border-[var(--line)] pt-4 grid grid-cols-3 gap-3">
+            <div>
+              <div class="pkicker mb-1">Completion</div>
+              <div class="font-semibold" style="color:var(--green); font-size:18px">92%</div>
+            </div>
+            <div>
+              <div class="pkicker mb-1">Compliance</div>
+              <div class="font-semibold" style="color:var(--green); font-size:18px">100%</div>
+            </div>
+            <div>
+              <div class="pkicker mb-1">Cost</div>
+              <div class="font-semibold" style="color:var(--amber); font-size:18px">$0.004</div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </section>
