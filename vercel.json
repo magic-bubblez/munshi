@@ -3,5 +3,9 @@
   "framework": null,
   "outputDirectory": "frontend",
   "buildCommand": "echo 'static site, no build needed'",
-  "installCommand": "echo 'no install needed'"
+  "installCommand": "echo 'no install needed'",
+  "rewrites": [
+    { "source": "/health",            "destination": "http://51.21.191.238:8000/health" },
+    { "source": "/api/:path*",        "destination": "http://51.21.191.238:8000/api/:path*" }
+  ]
 }

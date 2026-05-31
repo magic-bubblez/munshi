@@ -2,7 +2,7 @@
 
 const _BACKEND = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
   ? 'http://localhost:8000'
-  : 'http://51.21.191.238:8000';
+  : '';
 
 const _MCP_SSE = `${_BACKEND}/mcp/up_pension/sse`;
 
