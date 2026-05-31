@@ -44,16 +44,16 @@ Never skip a case. Never guess — verify first.\
 """
 
 
-async def run(agent_name: str) -> None:
+async def run(agent_name: str, mcp_url: str) -> None:
     client = MultiServerMCPClient(
-        {"munshi": {"transport": "sse", "url": _MCP_URL}}
+        {"munshi": {"transport": "sse", "url": mcp_url}}
     )
     async with client.session("munshi") as session:
         tools = await load_mcp_tools(session)
         llm = ChatAnthropic(model=_MODEL, temperature=0)
         agent = create_react_agent(llm, tools)
 
-        print(f"[single] starting run as '{agent_name}' → {_MCP_URL}")
+        print(f"[single] starting run as '{agent_name}' → {mcp_url}")
         result = await agent.ainvoke(
             {
                 "messages": [
@@ -73,6 +73,7 @@ async def run(agent_name: str) -> None:
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
+    parser.add_argument("--mcp-url", default=_MCP_URL, help="MCP SSE endpoint")
     parser.add_argument("--agent-name", default="single-react-v1")
     args = parser.parse_args()
-    asyncio.run(run(args.agent_name))
+    asyncio.run(run(args.agent_name, args.mcp_url))

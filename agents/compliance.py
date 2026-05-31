@@ -101,9 +101,9 @@ def _extract_plan(text: str) -> str:
     return text  # fallback: use full text
 
 
-async def run(agent_name: str) -> None:
+async def run(agent_name: str, mcp_url: str) -> None:
     client = MultiServerMCPClient(
-        {"munshi": {"transport": "sse", "url": _MCP_URL}}
+        {"munshi": {"transport": "sse", "url": mcp_url}}
     )
     async with client.session("munshi") as session:
         tools = await load_mcp_tools(session)
@@ -161,6 +161,7 @@ async def run(agent_name: str) -> None:
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
+    parser.add_argument("--mcp-url", default=_MCP_URL, help="MCP SSE endpoint")
     parser.add_argument("--agent-name", default="compliance-layered-v1")
     args = parser.parse_args()
-    asyncio.run(run(args.agent_name))
+    asyncio.run(run(args.agent_name, args.mcp_url))
