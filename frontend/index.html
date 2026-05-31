@@ -50,33 +50,35 @@
       letter-spacing: 0.12em;
       color: var(--text-muted);
     }
-    /* Trace preview inside hero panel */
-    .trow {
-      display: flex;
-      align-items: baseline;
-      gap: 10px;
-      padding: 3px 0;
+    /* Hero leaderboard preview */
+    .lb-preview-head {
+      display: grid;
+      grid-template-columns: 24px 1fr 52px 52px 56px;
+      gap: 8px;
+      padding: 0 0 8px;
+      border-bottom: 1px solid var(--line);
       font-family: 'JetBrains Mono', monospace;
-      font-size: 12px;
-    }
-    .trow.ind { padding-left: 50px; }
-    .tlbl {
       font-size: 9px;
-      font-weight: 700;
-      letter-spacing: 0.06em;
-      min-width: 40px;
-      padding: 2px 5px;
-      border-radius: 2px;
-      flex-shrink: 0;
-      text-align: center;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-muted);
     }
-    .tlbl-call   { background: rgba(245,158,11,0.12); color: var(--amber); }
-    .tlbl-ok     { background: rgba(132,204,22,0.10); color: var(--green); }
-    .tlbl-rule   { background: rgba(239,68,68,0.12);  color: var(--red);   }
-    .tfn  { color: var(--text); }
-    .targ { color: var(--text-muted); }
-    .tval { color: var(--text-dim); }
-    .tred { color: var(--red); }
+    .lb-preview-row {
+      display: grid;
+      grid-template-columns: 24px 1fr 52px 52px 56px;
+      gap: 8px;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--line);
+      align-items: center;
+    }
+    .lb-preview-row:last-child { border-bottom: none; }
+    .lb-rank  { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text-muted); }
+    .lb-rank.top { color: var(--amber); font-weight: 600; }
+    .lb-name  { font-family: 'JetBrains Mono', monospace; font-size: 13px; color: var(--text); font-weight: 500; }
+    .lb-hi    { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--green); text-align: right; }
+    .lb-mid   { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--amber); text-align: right; }
+    .lb-lo    { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--red);   text-align: right; }
+    .lb-cost  { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text-muted); text-align: right; }
   </style>
 </head>
 <body class="grid-bg scanline">
